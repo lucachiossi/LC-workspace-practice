@@ -1,0 +1,31 @@
+Resource management is very important when working with languages such as C++
+
+With C++11 and higher versions, new features have been introduced to improve code efficiency, especially
+during resource allocation and deallocation.
+
+'Rule of the BIG FIVE' -> defines how memory is allocated during variables' initialization.
+'MOVE semantic' -> take advantage of temporary objects to optimize code efficiency
+
+Resource Management:
+1) 'Destructor'
+	~Object()
+
+2) 'Assignemnt Operator'
+	Object& operator=(const Object& obj)
+
+3) 'Copy Constructor'
+	Object(const Object& obj)
+
+4) 'Move Constructor'
+	Object(Object&& obj)
+
+5) 'Move Assignment Operator '
+	Object& operator=(Object&& obj)
+
+Resource Management Policy:
+* no resaurce management in the class
+	-> use compiler-provided versions of these functions (number 4 and 5 aren't provided by default)
+* write your own copy functions to perform deep copy
+* write your own move functions to support move semantic
+* disable copy and move semantics for the class because it doesn't make sense to allow it
+	-> use '=delete' notation
