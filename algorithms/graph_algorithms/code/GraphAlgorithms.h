@@ -1,0 +1,4 @@
+#ifndef GRAPH_ALGORITHMS
+#define GRAPH_ALGORITHMS
+
+#endif

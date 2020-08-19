@@ -1,0 +1,6 @@
+python input_file_generator.py ===> creates a file.txt representing an array to be ordered
+makefile ===> creates the runnable program that shows both MERGE SORT and QUICK SORT algorithm
+sh script ===> launches the program with the created inputfile
+
+SortAlgorithms.cc, SortAlgorithms.h ===> contains the algorithms implementations
+Sort.cc ===> read the input and calls the sorting functions, it shows step by step how the algorithms work
