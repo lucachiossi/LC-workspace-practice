@@ -43,10 +43,11 @@ int main(int argc, char* argv[]) {
         }
     }
     experimentNumber = atoi(argv[3]);
+
     std::cout << "input parameters:\n" << inputFile << std::endl << graphRepresentation << std::endl << experimentNumber << std::endl;
 
     // Get Graph
-    
+    AdjacencyList adj_list(const_cast<char*>(inputFile.c_str()));
     
     std::cout << "\n-*-*-*END*-*-*-\n";
 }

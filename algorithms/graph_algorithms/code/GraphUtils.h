@@ -5,6 +5,7 @@
 
 #include <clocale>
 #include <vector>
+#include <iostream>
 
 class AdjVertex;
 class AdjEdge;
@@ -55,7 +56,12 @@ class AdjacencyList {
         std::vector<AdjVertex>* adjVertexList;
         std::vector<AdjEdge>* adjEdgeList;
     public:
-        AdjacencyList(char* inputFile);
+        /*
+         * construct the Adjacency Linked List from a jsonFile containing
+         * directed: d|nd
+         * weighted edges: we|nwe
+         * matrix: adjacency_matrix */
+        AdjacencyList(char* jsonInputFile);
         ~AdjacencyList();
 
         AdjVertex** getVerteces();

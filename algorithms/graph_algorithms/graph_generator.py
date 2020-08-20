@@ -160,7 +160,13 @@ def main():
     for i in enumerate(adj_matrix):
         print(i[1])
 
-    json.dump(adj_matrix, out)
+    matrix_info = {
+        "directed": directed,
+        "weighted edges": weighted_edges,
+        "matrix": adj_matrix
+    }
+
+    json.dump(matrix_info, out)
     out.close()
 
 
