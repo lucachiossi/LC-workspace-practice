@@ -43,9 +43,10 @@ int main(int argc, char* argv[]) {
         }
     }
     experimentNumber = atoi(argv[3]);
-    /* std::cout << inputFile << std::endl << graphRepresentation << std::endl << experimentNumber << std::endl; */
+    std::cout << "input parameters:\n" << inputFile << std::endl << graphRepresentation << std::endl << experimentNumber << std::endl;
 
     // Get Graph
+    
     
     std::cout << "\n-*-*-*END*-*-*-\n";
 }

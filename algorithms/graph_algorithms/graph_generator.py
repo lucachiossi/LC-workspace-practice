@@ -2,7 +2,7 @@
 this script generates graphs in json format
 
 input: <file-name> d|nd <max-node-number> <max-neighbors-per-node> we|nwe
-    (<max-edge-weight>)
+    (<max-edge-weight> (null|neg (null)))
 
 output: <file-name>.json
 """
@@ -19,10 +19,10 @@ def main():
 
     # CHECK AND GET COMMAND LINE INPUT
     input_format = str('<file-name> d|nd <max-nodes> <max-neighbors>')
-    input_format += str(' we|nwe (<max-edge-weight>)')
+    input_format += str(' we|nwe (<max-edge-weight>) (null|neg (null))')
     bad_input_message = str('call as: graph_generator.py ') + input_format
 
-    if len(sys.argv) < 6 or len(sys.argv) > 8:
+    if len(sys.argv) < 6 or len(sys.argv) > 10:
         print('bad input\n{0}'.format(bad_input_message))
         sys.exit()
 
@@ -45,6 +45,8 @@ def main():
 
     weighted_edges = sys.argv[5]
     max_edge_weight = 0
+    negative_edge_weight = False
+    null_edge_weight = False
 
     if output_file_name.parent.exists() is False:
         print('bad file-name\n{0}'.format(bad_input_message))
@@ -66,8 +68,13 @@ def main():
         print('bad we|nwe\n{0}'.format(bad_input_message))
         sys.exit()
 
+    if weighted_edges == 'nwe':
+        if len(sys.argv) >= 7:
+            print('too many parameters for nwe\n{0}'.format(bad_input_message))
+            sys.exit()
+
     if weighted_edges == 'we':
-        if len(sys.argv) != 7:
+        if len(sys.argv) < 7:
             print('bad edge-weight'' parameter\n{0}'.format(bad_input_message))
             sys.exit()
         try:
@@ -79,6 +86,35 @@ def main():
         if max_edge_weight < 1:
             print('bad edge_weight\n{0}'.format(bad_input_message))
             sys.exit()
+        if len(sys.argv) >= 8:
+            if sys.argv[7] == "neg":
+                negative_edge_weight = True
+                if len(sys.argv) >= 9:
+                    if sys.argv[8] == "null":
+                        null_edge_weight = True
+                    else:
+                        print('bad null parameter\n{0}'.format(
+                            bad_input_message
+                            ))
+                        sys.exit()
+            elif sys.argv[7] == "null":
+                null_edge_weight = True
+            else:
+                print('bad neg|null parameter\n{0}'.format(bad_input_message))
+                sys.exit()
+
+    print("\ngenerated a file with the following parameters:")
+    print("path name: {}".format(output_file_name))
+    print("directed: {}".format(directed))
+    print("max nodes: {}".format(max_nodes))
+    print("max neighbors: {}".format(max_neighbors))
+    print("weighted: {}".format(weighted_edges))
+    if weighted_edges == "we":
+        print("max weight: {}".format(max_edge_weight))
+    if negative_edge_weight:
+        print("negative weights allowed")
+    if null_edge_weight:
+        print("null weights allowed")
 
     # GENERATE GRAPH
     adj_matrix = [['x' for x in range(max_nodes)]for y in range(max_nodes)]
@@ -87,14 +123,24 @@ def main():
         neighbors_number = random.randint(1, max_neighbors)
         for _ in itertools.repeat(None, neighbors_number):
             neighbor = -1
-            if directed == 'd':
-                neighbor = random.randint(row, max_nodes-1)
-            else:
-                neighbor = random.randint(0, max_nodes-1)
+            neighbor = random.randint(0, max_nodes-1)
             edge_weight = 1
             if weighted_edges == 'we':
-                edge_weight = random.randint(1, max_edge_weight)
-
+                if negative_edge_weight:
+                    edge_weight = random.randint(
+                        int(-int(max_edge_weight)),
+                        max_edge_weight
+                        )
+                    if not null_edge_weight:
+                        while edge_weight == 0:
+                            edge_weight = random.randint(
+                                int(-int(max_edge_weight)),
+                                max_edge_weight
+                                )
+                else:
+                    edge_weight = random.randint(0, max_edge_weight)
+                    if not null_edge_weight:
+                        edge_weight = random.randint(1, max_edge_weight)
             adj_matrix[row][neighbor] = edge_weight
 
     if directed == 'nd':
