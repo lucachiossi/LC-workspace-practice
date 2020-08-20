@@ -4,6 +4,7 @@
 #define BAD_ARGUMENTS -1
 
 #include <clocale>
+#include <map>
 #include <vector>
 #include <iostream>
 
@@ -14,38 +15,51 @@ class AdjVertex {
     private:
         int id;
         int val;
-        AdjEdge* next;
+        std::vector<AdjEdge*>* incidenceEdges;
     public:
-        AdjVertex(int id) :
+        AdjVertex(int id, int val=0) :
             id(id),
-            val(-1),
-            next(nullptr) {
+            val(val) {
+                this->incidenceEdges = new std::vector<AdjEdge*>();
+                std::cout << "created vertex " << id << std::endl;
             }
-        AdjVertex(int id, int val) :
-            id(id),
-            val(val),
-            next(nullptr) {
+        ~AdjVertex() {
+            std::vector<AdjEdge*>::iterator it;
+            for(it = this->incidenceEdges->begin(); it != this->incidenceEdges->end(); it++) {
+                AdjEdge* edge = *it;
+                delete edge;
             }
-        /* ~AdjVertex() { */
-        /*     while(next != nullptr) { */
-        /*         this->adjEdge->erase(); */
-        /*     } */
-        /* } */
-        /* void addEdge(adjEdge edge); */
-        /* void erase(); */
+            delete this->incidenceEdges;
+            std::cout << "deleted vertex " << id << std::endl;
+        }
+        int getId();
+        int getVal();
+        void addEdge(AdjEdge* edge);
+        void eraseEdge(int idEdge);
+        /* std::vector<int> incidentEdges(); // */
+        /* bool isIncidentTo(AdjVertex* v); // */
 };
 
 class AdjEdge {
     private:
+        int id;
+        int weight;
         AdjVertex* left;
         AdjVertex* right;
-        int id_left;
-        int id_right;
-        int weight;
     public:
-        /* AdjEdge(id_left, id_right); */
-        /* AdjEdge(); */
-        /* void erase(); */
+        AdjEdge(int id, AdjVertex* left, AdjVertex* right, int weight=1) :
+            id(id),
+            left(left),
+            right(right),
+            weight(weight) {
+                std::cout << "created edge " << id << std::endl;
+            }
+        ~AdjEdge() {
+            this->left->eraseEdge(this->id);
+            this->right->eraseEdge(this->id);
+            std::cout << "deleted edge " << id << std::endl;
+        };
+        int getId();
 };
 
 /*
@@ -53,8 +67,10 @@ class AdjEdge {
  * weighted/unweighted */
 class AdjacencyList {
     private:
-        std::vector<AdjVertex>* adjVertexList;
-        std::vector<AdjEdge>* adjEdgeList;
+        std::map<int, AdjVertex*>* vertecesList;
+        std::map<int, AdjEdge*>* edgesList;
+        int idVertex;
+        int idEdge;
     public:
         /*
          * construct the Adjacency Linked List from a jsonFile containing
@@ -64,14 +80,14 @@ class AdjacencyList {
         AdjacencyList(char* jsonInputFile);
         ~AdjacencyList();
 
-        AdjVertex** getVerteces();
-        AdjEdge** getEdges();
+        std::vector<AdjVertex> getVerteces();
+        std::vector<AdjEdge> getEdges();
 
         void insertVertex(AdjVertex vertex);
-        void eraseVertex(AdjVertex vertex);
+        void eraseVertex(int id);
 
         void insertEdge(AdjEdge edge);
-        void eraseEdge(AdjEdge edge);
+        void eraseEdge(int idEdge);
 };
 
 /*

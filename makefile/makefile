@@ -1,24 +1,25 @@
-IDIR = ./code
+IDIR = ./src
+ODIR = ./bin
+
 CXX = g++
 CXXFLAGS = -I $(IDIR)
 
-ODIR = ./code/objects
-
-_DEPS = GraphAlgorithms.h GraphRepresentation.h 
+_DEPS = Data.h
 DEPS = $(patsubst %,$(IDIR)/%,$(_DEPS))
 
-_CODE = GraphAlgorithms.cc GraphRepresentation.cc Graphs.cc
+_CODE = Data.cc MemoryManagement.cc
 CODE = $(patsubst %,$(IDIR)/%,$(_CODE))
 
-_OBJ = GraphAlgorithms.o GraphRepresentation.o Graphs.o
+_OBJ = Data.o MemoryManagement.o
 OBJ = $(patsubst %,$(ODIR)/%,$(_OBJ))
 
 $(ODIR)/%.o: $(IDIR)/%.cc $(DEPS)
 	$(CXX) -c -o $@ $< $(CXXFLAGS)
 
-graphs: $(OBJ)
+memory_management_example: $(OBJ)
 	$(CXX) -o $@ $^ $(CXXFLAGS)
 	
 clean:
-	rm $(ODIR)/*.o graphs
+	rm $(ODIR)/*.o memory_management_example
+	# rm -d $(ODIR)
 

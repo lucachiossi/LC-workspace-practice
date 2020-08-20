@@ -2,7 +2,7 @@ IDIR = ./code
 ODIR = ./bin
 
 CXX = g++
-CXXFLAGS = -I $(IDIR)
+CXXFLAGS = -I $(IDIR) -ljsoncpp
 
 _DEPS = GraphAlgorithms.h GraphSearch.h GraphUtils.h
 DEPS = $(patsubst %,$(IDIR)/%,$(_DEPS))
