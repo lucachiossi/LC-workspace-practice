@@ -2,14 +2,45 @@
 
 #include <algorithm>
 #include <fstream>
+#include <iostream>
 #include <iterator>
 #include <jsoncpp/json/json.h> 
 #include <jsoncpp/json/reader.h>
 #include <jsoncpp/json/value.h>
+#include <map>
 #include <sstream>
 #include <string>
 
 // Adjacency Vertex
+std::string AdjVertex::printVertex() {
+    std::stringstream str;
+    str << "vertex(id:" << this->id << ", numIncidenceEdges:" << this->incidenceEdges->size();
+    std::vector<AdjEdge*>::iterator it;
+    for(it = this->incidenceEdges->begin(); it != this->incidenceEdges->end();  it++) {
+        str << ", " << (*it)->getId();
+    }
+    str << ")";
+    return str.str();
+}
+
+AdjVertex::AdjVertex(int id, int val) {
+    this->id = id;
+    this->val = val;
+    this->incidenceEdges = new std::vector<AdjEdge*>();
+    // check vertex created
+    std::cout << "created " << this->printVertex() << std::endl;
+}
+
+AdjVertex::~AdjVertex() {
+    std::vector<AdjEdge*>::iterator it;
+    while((it = this->incidenceEdges->begin()) != this->incidenceEdges->end()) {
+        delete (*it);
+    }
+    delete this->incidenceEdges;
+    // check vertex deleted
+    std::cout << "deleted vertex " << this->id << std::endl;
+}
+
 int AdjVertex::getId() {
     return this->id;
 }
@@ -18,28 +49,86 @@ int AdjVertex::getVal() {
     return this->val;
 }
 
-void AdjVertex::addEdge(AdjEdge* edge) {
-    this->incidenceEdges->push_back(edge);
+std::vector<AdjEdge*>* AdjVertex::getIncidenceEdges() {
+    return this->incidenceEdges;
 }
 
-void AdjVertex::eraseEdge(int idEdge) {
+void AdjVertex::addEdge(AdjEdge* edge) {
+    this->incidenceEdges->push_back(edge);
+    /* std::cout << "added edge " << edge->getId() << " to vertex " << this->id << std::endl; */
+}
+
+void AdjVertex::removeEdge(int idEdge) {
     std::vector<AdjEdge*>::iterator it;
     for(it = this->incidenceEdges->begin(); it != this->incidenceEdges->end(); it++) {
         if((*it)->getId() == idEdge) {
             this->incidenceEdges->erase(it);
+            break;
         }
     }
+    /* std::cout << "removed edge " << idEdge << " from vertex " << this->id << std::endl; */
 }
 
 // Adjacency Edge
+std::string AdjEdge::printEdge() {
+    std::stringstream str;
+    str << "edge(id:" << this->id << ", left:" << this->left->getId() << ", right:" << this->right->getId() << ", weight:" << this->weight << ")";
+    return str.str();
+}
+
+AdjEdge::AdjEdge(int id, AdjVertex* left, AdjVertex* right, int weight) {
+    this->id = id;
+    this->left = left;
+    this->right = right;
+    this->weight = weight; 
+    // check edge created
+    std::cout << "created " << this->printEdge() << std::endl;
+}
+
+AdjEdge::~AdjEdge() {
+    this->left->removeEdge(this->id);
+    this->right->removeEdge(this->id);
+    // chwck edge deleted
+    std::cout << "deleted edge " << this->id << std::endl;
+}
 
 
 int AdjEdge::getId() {
-       return this->id;
+    return this->id;
+}
+
+int AdjEdge::getWeight() {
+    return this->weight;
 }
 
 
 // Adjacency Linked LIst
+std::string AdjacencyList::printVerteces() {
+    std::stringstream str;
+    str << "---verteces---" << std::endl;
+    std::map<int,AdjVertex*>::iterator it;
+    for(it = this->vertecesList->begin(); it != this->vertecesList->end(); it++) {
+        str << (*it).second->printVertex() << std::endl;
+    }
+    return str.str();
+}
+
+std::string AdjacencyList::printEdges() {
+    std::stringstream str;
+    str << "---edges---:" << std::endl;
+    std::map<int,AdjEdge*>::iterator it;
+    for(it = this->edgesList->begin(); it != this->edgesList->end(); it++) {
+        str << (*it).second->printEdge() << std::endl;
+    }
+    return str.str();
+}
+
+std::string AdjacencyList::printGraph(std::string message) {
+    std::stringstream str;
+    str << "\n---Graph -> " << message << std::endl << this->printVerteces() << this->printEdges() << std::endl;
+    return str.str();
+}
+
 AdjacencyList::AdjacencyList(char* jsonInputFile) {
     std::ifstream ifs(jsonInputFile); 
     Json::Reader reader;
@@ -63,7 +152,7 @@ AdjacencyList::AdjacencyList(char* jsonInputFile) {
     for(int i = 0; i < vertex_number; i++) {
         AdjVertex* vertex = new AdjVertex(i);
         this->vertecesList->emplace(i,vertex);
-        this->idVertex = i;
+        this->idVertex = i+1;
     }
 
     this->idEdge = 0;
@@ -77,12 +166,15 @@ AdjacencyList::AdjacencyList(char* jsonInputFile) {
 
             if(val.str() != "x") {
                 // check endpoints
-                std::cout << "edge connecting " << y << " and " << x << std::endl;
+                /* std::cout << "edge connecting " << y << " and " << x << std::endl; */
 
                 AdjVertex* left = this->vertecesList->at(y);
                 AdjVertex* right = this->vertecesList->at(x);
 
-                AdjEdge* edge = new AdjEdge(this->idEdge, left, right);
+                int weight = atoi(val.str().c_str());
+
+                AdjEdge* edge = new AdjEdge(this->idEdge, left, right, weight);
+                this->idEdge++;
 
                 left->addEdge(edge);
                 right->addEdge(edge);
@@ -94,6 +186,78 @@ AdjacencyList::AdjacencyList(char* jsonInputFile) {
 }
 
 AdjacencyList::~AdjacencyList() {
+    // delete verteces
+    std::map<int,AdjVertex*>::iterator v_it;
+    for(v_it = this->vertecesList->begin(); v_it != this->vertecesList->end(); v_it++) {
+        delete (*v_it).second;
+    }
+    delete this->vertecesList;
+    // verteces delete incidence edges when they are deleted
+    delete this->edgesList;
+}
 
+std::map<int,AdjVertex*>* AdjacencyList::getVerteces() {
+    return this->vertecesList;
+}
+
+std::map<int,AdjEdge*>* AdjacencyList::getEdges() {
+    return this->edgesList;
+}
+
+void AdjacencyList::insertVertex(int val) {
+    AdjVertex* vertex = new AdjVertex(this->idVertex, val);
+    this->idVertex++;
+    // insert new vertex into verteces list
+    this->vertecesList->emplace(vertex->getId(),vertex);
+    std::cout << "added vertex " << vertex->getId() << " to the graph" << std::endl;
+}
+
+void AdjacencyList::insertEdge(int id_left, int id_right, int weight) {
+    auto l = this->vertecesList->find(id_left);
+    auto r = this->vertecesList->find(id_right);
+    if(l==this->vertecesList->end() || r==this->vertecesList->end()) {
+        std::cout << "(!!!) tried to insert edge with not existing verteces linked (!!!)" << std::endl;
+        return;
+    }
+    AdjVertex* left = l->second;
+    AdjVertex* right = r->second;
+    AdjEdge* edge = new AdjEdge(this->idEdge, left, right, weight);
+    this->idEdge++;
+    // insert new edge into incidence lists of left and right
+    left->addEdge(edge);
+    right->addEdge(edge);
+    // insert new edge into edges list
+    this->edgesList->emplace(edge->getId(),edge);
+    std::cout << "added edge " << edge->getId() << " to the graph" << std::endl;
+}
+
+void AdjacencyList::eraseVertex(int id) {
+    auto v = this->vertecesList->find(id);
+    if(v==this->vertecesList->end()) {
+        std::cout << "(!!!) tried to erase not existing vertex (!!!)" << std::endl;
+        return;
+    }
+    AdjVertex* vertex = v->second;
+    // remove vertex from verteces list
+    this->vertecesList->erase(id);
+    for(auto it = vertex->getIncidenceEdges()->begin(); it != vertex->getIncidenceEdges()->end(); it++) {
+        // remove related edge from edges list
+        this->edgesList->erase((*it)->getId());
+    }
+    delete vertex;
+    std::cout << "removed vertex " << vertex->getId() << " to the graph" << std::endl;
+}
+
+void AdjacencyList::eraseEdge(int id) {
+    auto e = this->edgesList->find(id);
+    if(e==this->edgesList->end()) {
+        std::cout << "(!!!) tried to erase not existing edge (!!!)" << std::endl;
+        return;
+    }
+    AdjEdge* edge = e->second;
+    // remove edge from edges list
+    this->edgesList->erase(id);
+    delete edge; // remove edge from related vertex incident lists
+    std::cout << "removed edge " << edge->getId() << " to the graph" << std::endl;
 }
 

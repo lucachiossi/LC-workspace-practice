@@ -1,6 +1,7 @@
 #ifndef GRAPH_UTILS
 #define GRAPH_UTILS
 
+#include <string>
 #define BAD_ARGUMENTS -1
 
 #include <clocale>
@@ -17,27 +18,16 @@ class AdjVertex {
         int val;
         std::vector<AdjEdge*>* incidenceEdges;
     public:
-        AdjVertex(int id, int val=0) :
-            id(id),
-            val(val) {
-                this->incidenceEdges = new std::vector<AdjEdge*>();
-                std::cout << "created vertex " << id << std::endl;
-            }
-        ~AdjVertex() {
-            std::vector<AdjEdge*>::iterator it;
-            for(it = this->incidenceEdges->begin(); it != this->incidenceEdges->end(); it++) {
-                AdjEdge* edge = *it;
-                delete edge;
-            }
-            delete this->incidenceEdges;
-            std::cout << "deleted vertex " << id << std::endl;
-        }
+        AdjVertex(int id, int val=0);
+        ~AdjVertex();
         int getId();
         int getVal();
+        std::vector<AdjEdge*>* getIncidenceEdges();
         void addEdge(AdjEdge* edge);
-        void eraseEdge(int idEdge);
-        /* std::vector<int> incidentEdges(); // */
-        /* bool isIncidentTo(AdjVertex* v); // */
+        void removeEdge(int idEdge);
+        /* std::vector<AdjEdge*> incidentEdges(); //TODO */
+        /* bool isIncidentTo(AdjVertex* v); //TODO */
+        std::string printVertex();
 };
 
 class AdjEdge {
@@ -47,19 +37,14 @@ class AdjEdge {
         AdjVertex* left;
         AdjVertex* right;
     public:
-        AdjEdge(int id, AdjVertex* left, AdjVertex* right, int weight=1) :
-            id(id),
-            left(left),
-            right(right),
-            weight(weight) {
-                std::cout << "created edge " << id << std::endl;
-            }
-        ~AdjEdge() {
-            this->left->eraseEdge(this->id);
-            this->right->eraseEdge(this->id);
-            std::cout << "deleted edge " << id << std::endl;
-        };
+        AdjEdge(int id, AdjVertex* left, AdjVertex* right, int weight=1);
+        ~AdjEdge();
         int getId();
+        int getWeight();
+        /* std::vector<AdjVertex*> endVerteces(); //TODO */
+        /* AdjVertex* opposite(AdjVertex* v); //TODO */
+        /* bool incidentOn(AdjVertex* v); //TODO */
+        std::string printEdge();
 };
 
 /*
@@ -67,6 +52,9 @@ class AdjEdge {
  * weighted/unweighted */
 class AdjacencyList {
     private:
+        /* vertecesList and edgesList contain all the objects representing
+         * the verteces and edges of the graph -> they have been implemented
+         * as maps in order to be more efficient during lookup operations */
         std::map<int, AdjVertex*>* vertecesList;
         std::map<int, AdjEdge*>* edgesList;
         int idVertex;
@@ -80,13 +68,25 @@ class AdjacencyList {
         AdjacencyList(char* jsonInputFile);
         ~AdjacencyList();
 
-        std::vector<AdjVertex> getVerteces();
-        std::vector<AdjEdge> getEdges();
+        std::string printGraph(std::string message="");
+        std::string printVerteces();
+        std::string printEdges();
 
-        void insertVertex(AdjVertex vertex);
+        /* it is good practive to obtain the linked lists (maps) before
+         * applying any algorithm to the graph in order to work with a
+         * consistent version */
+        std::map<int, AdjVertex*>* getVerteces();
+        std::map<int, AdjEdge*>* getEdges();
+
+        /* it is important to add new verteces to the adjacency list
+         * to maintain the linked lists consistent */
+        void insertVertex(int val=0);
+        void insertEdge(int id_left, int id_right, int weight=1);
+
+        /* erasing an element from the graph will make related pointers
+         * inconsistent to the graph -> it is a good usage to erase element
+         * from the graph always before applying an algorithm */
         void eraseVertex(int id);
-
-        void insertEdge(AdjEdge edge);
         void eraseEdge(int idEdge);
 };
 
