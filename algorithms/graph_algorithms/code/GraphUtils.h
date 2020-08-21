@@ -22,11 +22,10 @@ class AdjVertex {
         ~AdjVertex();
         int getId();
         int getVal();
-        std::vector<AdjEdge*>* getIncidenceEdges();
+        std::vector<AdjEdge*>* getIncidenceEdges(); // vertex method
         void addEdge(AdjEdge* edge);
         void removeEdge(int idEdge);
-        /* std::vector<AdjEdge*> incidentEdges(); //TODO */
-        /* bool isIncidentTo(AdjVertex* v); //TODO */
+        bool isIncidentTo(AdjVertex* v); // vertex method
         std::string printVertex();
 };
 
@@ -41,9 +40,9 @@ class AdjEdge {
         ~AdjEdge();
         int getId();
         int getWeight();
-        /* std::vector<AdjVertex*> endVerteces(); //TODO */
-        /* AdjVertex* opposite(AdjVertex* v); //TODO */
-        /* bool incidentOn(AdjVertex* v); //TODO */
+        std::pair<AdjVertex*,AdjVertex*> endVerteces(); // edge method
+        AdjVertex* opposite(AdjVertex* v); // edge method
+        bool incidentOn(AdjVertex* v); // edge method
         std::string printEdge();
 };
 

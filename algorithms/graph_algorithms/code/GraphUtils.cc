@@ -10,6 +10,7 @@
 #include <map>
 #include <sstream>
 #include <string>
+#include <utility>
 
 // Adjacency Vertex
 std::string AdjVertex::printVertex() {
@@ -28,7 +29,7 @@ AdjVertex::AdjVertex(int id, int val) {
     this->val = val;
     this->incidenceEdges = new std::vector<AdjEdge*>();
     // check vertex created
-    std::cout << "created " << this->printVertex() << std::endl;
+    /* std::cout << "created " << this->printVertex() << std::endl; */
 }
 
 AdjVertex::~AdjVertex() {
@@ -38,7 +39,7 @@ AdjVertex::~AdjVertex() {
     }
     delete this->incidenceEdges;
     // check vertex deleted
-    std::cout << "deleted vertex " << this->id << std::endl;
+    /* std::cout << "deleted vertex " << this->id << std::endl; */
 }
 
 int AdjVertex::getId() {
@@ -69,6 +70,18 @@ void AdjVertex::removeEdge(int idEdge) {
     /* std::cout << "removed edge " << idEdge << " from vertex " << this->id << std::endl; */
 }
 
+/* 
+ * check if (this) vertex and (v) vertex have at least a common edge */
+bool AdjVertex::isIncidentTo(AdjVertex* v) {
+    for(auto it = this->incidenceEdges->begin(); it != this->incidenceEdges->end(); it++) {
+        if((*it)->incidentOn(v) || (*it)->incidentOn(v)) {
+            /* std::cout << "found " << (*it)->getId() << std::endl; */
+            return true;
+        }
+    }
+    return false;
+}
+
 // Adjacency Edge
 std::string AdjEdge::printEdge() {
     std::stringstream str;
@@ -82,14 +95,14 @@ AdjEdge::AdjEdge(int id, AdjVertex* left, AdjVertex* right, int weight) {
     this->right = right;
     this->weight = weight; 
     // check edge created
-    std::cout << "created " << this->printEdge() << std::endl;
+    /* std::cout << "created " << this->printEdge() << std::endl; */
 }
 
 AdjEdge::~AdjEdge() {
     this->left->removeEdge(this->id);
     this->right->removeEdge(this->id);
     // chwck edge deleted
-    std::cout << "deleted edge " << this->id << std::endl;
+    /* std::cout << "deleted edge " << this->id << std::endl; */
 }
 
 
@@ -101,6 +114,27 @@ int AdjEdge::getWeight() {
     return this->weight;
 }
 
+std::pair<AdjVertex*,AdjVertex*> AdjEdge::endVerteces() {
+    return std::pair<AdjVertex*,AdjVertex*>(this->left,this->right);
+}
+
+AdjVertex* AdjEdge::opposite(AdjVertex* v) {
+    if(this->left->getId() == v->getId()) {
+        return this->right;
+    }
+    else {
+        return this->left;
+    }
+}
+
+bool AdjEdge::incidentOn(AdjVertex* v) {
+    int v_id = v->getId();
+    if(v_id == this->left->getId() || v_id == this->right->getId()) {
+        /* std::cout << "edge " << this->id << " incident with vertex " << v->getId() << std::endl; */
+        return true;
+    }
+    return false;
+}
 
 // Adjacency Linked LIst
 std::string AdjacencyList::printVerteces() {
@@ -209,7 +243,7 @@ void AdjacencyList::insertVertex(int val) {
     this->idVertex++;
     // insert new vertex into verteces list
     this->vertecesList->emplace(vertex->getId(),vertex);
-    std::cout << "added vertex " << vertex->getId() << " to the graph" << std::endl;
+    /* std::cout << "added vertex " << vertex->getId() << " to the graph" << std::endl; */
 }
 
 void AdjacencyList::insertEdge(int id_left, int id_right, int weight) {
@@ -228,7 +262,7 @@ void AdjacencyList::insertEdge(int id_left, int id_right, int weight) {
     right->addEdge(edge);
     // insert new edge into edges list
     this->edgesList->emplace(edge->getId(),edge);
-    std::cout << "added edge " << edge->getId() << " to the graph" << std::endl;
+    /* std::cout << "added edge " << edge->getId() << " to the graph" << std::endl; */
 }
 
 void AdjacencyList::eraseVertex(int id) {
@@ -245,7 +279,7 @@ void AdjacencyList::eraseVertex(int id) {
         this->edgesList->erase((*it)->getId());
     }
     delete vertex;
-    std::cout << "removed vertex " << vertex->getId() << " to the graph" << std::endl;
+    /* std::cout << "removed vertex " << vertex->getId() << " to the graph" << std::endl; */
 }
 
 void AdjacencyList::eraseEdge(int id) {
@@ -258,6 +292,6 @@ void AdjacencyList::eraseEdge(int id) {
     // remove edge from edges list
     this->edgesList->erase(id);
     delete edge; // remove edge from related vertex incident lists
-    std::cout << "removed edge " << edge->getId() << " to the graph" << std::endl;
+    /* std::cout << "removed edge " << edge->getId() << " to the graph" << std::endl; */
 }
 

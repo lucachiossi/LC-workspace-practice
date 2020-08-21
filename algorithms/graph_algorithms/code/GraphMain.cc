@@ -48,26 +48,20 @@ int main(int argc, char* argv[]) {
 
     // Get Graph
     AdjacencyList adj_list(const_cast<char*>(inputFile.c_str()));
+    std::cout << adj_list.printGraph();
 
     // debug AdjacencyList methods
-    std::cout << adj_list.printGraph() << std::endl;
-    std::map<int,AdjVertex*>* vertecesList = adj_list.getVerteces();
-    std::map<int,AdjEdge*>* edgesList = adj_list.getEdges();
-    /* std::cout << "verteces:"; */
-    /* for(auto it = vertecesList->begin(); it != vertecesList->end(); it++) { */
-    /*     std::cout << " " << it->second->getId(); */
-    /* } */
-    /* std::cout << "\nedges:"; */
-    /* for(auto it = edgesList->begin(); it != edgesList->end(); it++) { */
-    /*     std::cout << " " << it->second->getId(); */
-    /* } */
-    adj_list.insertVertex();
-    adj_list.insertVertex();
-    adj_list.insertEdge(10,9);
-    adj_list.insertEdge(10,3);
-    adj_list.insertEdge(1,7);
-    adj_list.insertEdge(30,30);
-    std::cout << adj_list.printGraph() << std::endl;
+    /* std::map<int,AdjVertex*>* vertecesList = adj_list.getVerteces(); */
+    /* std::map<int,AdjEdge*>* edgesList = adj_list.getEdges(); */
+    /* adj_list.insertVertex(); */
+    /* adj_list.insertVertex(); */
+    /* adj_list.insertEdge(10,9); */
+    /* adj_list.insertEdge(10,3); */
+    /* adj_list.insertEdge(1,7); */
+    /* adj_list.insertEdge(30,30); */
+    /* std::cout << adj_list.printGraph(); */
+    /* std::cout << "incidence 1,7: " << vertecesList->find(1)->second->isIncidentTo(vertecesList->find(7)->second) << std::endl; */
+    /* std::cout << "incidence 5,6: " << vertecesList->find(5)->second->isIncidentTo(vertecesList->find(6)->second) << std::endl; */
 
     std::cout << "\n-*-*-*END*-*-*-\n";
 }
