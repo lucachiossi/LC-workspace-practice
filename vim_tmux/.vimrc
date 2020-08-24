@@ -3,6 +3,9 @@ set noswapfile
 set background=dark
 set t_Co=256
 set hlsearch
+set number
+
+highlight LineNr ctermfg=grey
 
 nmap <PageUp> :tabp<CR>
 nmap <PageDown> :tabn<CR>
