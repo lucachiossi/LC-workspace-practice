@@ -15,7 +15,8 @@
 // Adjacency Vertex
 std::string AdjVertex::printVertex() {
     std::stringstream str;
-    str << "vertex(id:" << this->id << ", numIncidenceEdges:" << this->incidenceEdges->size();
+    str << "vertex(id:" << this->id << ", explored: " << this->explored;
+    str << ", numIncidenceEdges:" << this->incidenceEdges->size();
     std::vector<AdjEdge*>::iterator it;
     for(it = this->incidenceEdges->begin(); it != this->incidenceEdges->end();  it++) {
         str << ", " << (*it)->getId();
@@ -27,6 +28,7 @@ std::string AdjVertex::printVertex() {
 AdjVertex::AdjVertex(int id, int val) {
     this->id = id;
     this->val = val;
+    this->explored = false;
     this->incidenceEdges = new std::vector<AdjEdge*>();
     // check vertex created
     /* std::cout << "created " << this->printVertex() << std::endl; */
@@ -48,6 +50,10 @@ int AdjVertex::getId() {
 
 int AdjVertex::getVal() {
     return this->val;
+}
+
+void AdjVertex::setExplored(bool explored) {
+    this->explored = explored;
 }
 
 std::vector<AdjEdge*>* AdjVertex::getIncidenceEdges() {
@@ -293,5 +299,11 @@ void AdjacencyList::eraseEdge(int id) {
     this->edgesList->erase(id);
     delete edge; // remove edge from related vertex incident lists
     /* std::cout << "removed edge " << edge->getId() << " to the graph" << std::endl; */
+}
+
+void AdjacencyList::resetExploration() {
+    for(auto it = this->vertecesList->begin(); it != this->vertecesList->end(); it++) {
+        it->second->setExplored(false);
+    }
 }
 

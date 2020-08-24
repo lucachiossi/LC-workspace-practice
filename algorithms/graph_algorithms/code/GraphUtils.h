@@ -16,12 +16,14 @@ class AdjVertex {
     private:
         int id;
         int val;
+        bool explored;
         std::vector<AdjEdge*>* incidenceEdges;
     public:
         AdjVertex(int id, int val=0);
         ~AdjVertex();
         int getId();
         int getVal();
+        void setExplored(bool explored);
         std::vector<AdjEdge*>* getIncidenceEdges(); // vertex method
         void addEdge(AdjEdge* edge);
         void removeEdge(int idEdge);
@@ -87,6 +89,10 @@ class AdjacencyList {
          * from the graph always before applying an algorithm */
         void eraseVertex(int id);
         void eraseEdge(int idEdge);
+
+        /* reset exploration status before running any search algorithm in order
+         * to have all unexplored verteces and edges */
+        void resetExploration();
 };
 
 /*
