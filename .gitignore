@@ -1,2 +1,5 @@
+# ignore .o files
 **/*.o
+
+# ignore compiled programs
 **/graph_program
