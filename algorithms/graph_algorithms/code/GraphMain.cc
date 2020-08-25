@@ -10,6 +10,7 @@
 #include <sys/stat.h>
 #include <vector>
 #include <memory>
+#include <ctime>
 
 int main(int argc, char* argv[]) {
     std::cout << "-*-*-*START*-*-*-\n\n";
@@ -46,6 +47,11 @@ int main(int argc, char* argv[]) {
 
     std::cout << "user input: (" << inputFile << "," << graphRepresentation << "," << experimentNumber << ")\n";
 
+    // time variables
+    std::clock_t c_start;
+    std::clock_t c_end;
+    double time_elapsed_ms;
+
     // Get Graph
     AdjacencyList adj_list(const_cast<char*>(inputFile.c_str()));
     std::cout << adj_list.printGraph();
@@ -54,15 +60,21 @@ int main(int argc, char* argv[]) {
 
     // Experiment1
     std::cout << "Experiment 1" << std::endl;
+    c_start = std::clock();
+
     AdjVertex* startVertex = vertecesList->find(1)->second;
     AdjVertex* endVertex = vertecesList->find(9)->second;
     shortestPath_BFS(startVertex, endVertex);
+    adj_list.resetExploration();
+
+    c_end = std::clock();
+    time_elapsed_ms = 1000.0 * (c_end-c_start) / CLOCKS_PER_SEC;
+    std::cout << "time: " << time_elapsed_ms << " ms" << std::endl;
 
     // Experiment2
     std::cout << "Experiment 2" << std::endl;
     adj_list.resetExploration();
     shortestPath_DFS(startVertex, endVertex);
 
-end_experiments:
     std::cout << "\n-*-*-*END*-*-*-\n";
 }

@@ -4,7 +4,7 @@
 #include "GraphUtils.h"
 #include "GraphSearch.h"
 
-// Shortest Path
+// shortest path
 void shortestPath_BFS(AdjVertex* start, AdjVertex* end);
 void shortestPath_DFS(AdjVertex* start, AdjVertex* end);
 

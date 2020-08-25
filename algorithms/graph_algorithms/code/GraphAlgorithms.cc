@@ -4,8 +4,7 @@
 #include <iostream>
 #include <vector>
 
-// MINIMUM PATH PROBLEM
-
+// shortest path
 void shortestPath_BFS(AdjVertex* start, AdjVertex* end) {
     std::deque<AdjVertex*> queue;
     start->setExplored(true);
@@ -33,6 +32,7 @@ void shortestPath_BFS(AdjVertex* start, AdjVertex* end) {
     std::cout << "NOT found path [" << start->getId() << "," << end->getId() << "]" << std::endl;
 }
 
+// shortest path
 void shortestPath_DFS(AdjVertex* start, AdjVertex* end) {
     //TODO
 }

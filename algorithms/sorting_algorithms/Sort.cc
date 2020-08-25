@@ -47,7 +47,7 @@ int main(int argc, char* argv[]) {
     
     c_end = std::clock();
     time_elapsed_ms = 1000.0 * (c_end-c_start) / CLOCKS_PER_SEC;
-    std::cout << "mergesort took: " << time_elapsed_ms << "ms/n" << std::endl;
+    std::cout << "mergesort took: " << time_elapsed_ms << "ms\n" << std::endl;
     
     PRINTDBG_SINGLE_ARRAY(sortedVector,"OUTPUT");
 
