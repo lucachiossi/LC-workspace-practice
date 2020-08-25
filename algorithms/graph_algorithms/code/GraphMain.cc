@@ -8,7 +8,6 @@
 #include <iostream>
 #include <string>
 #include <sys/stat.h>
-
 #include <vector>
 
 int main(int argc, char* argv[]) {
@@ -70,5 +69,13 @@ int main(int argc, char* argv[]) {
     adj_list.resetExploration();
     std::cout << adj_list.printGraph();
 
+    // debug BFS exploration
+    AdjVertex* startVertex = vertecesList->find(3)->second;
+    BreadthFirstSearch bfs(startVertex);
+    bfs.printExploration();
+    adj_list.resetExploration();
+    DepthFirstSearch dfs(startVertex);
+    dfs.printExploration();
+    
     std::cout << "\n-*-*-*END*-*-*-\n";
 }

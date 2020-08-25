@@ -52,6 +52,10 @@ int AdjVertex::getVal() {
     return this->val;
 }
 
+bool AdjVertex::isExplored() {
+    return this->explored;
+}
+
 void AdjVertex::setExplored(bool explored) {
     this->explored = explored;
 }

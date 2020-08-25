@@ -23,6 +23,7 @@ class AdjVertex {
         ~AdjVertex();
         int getId();
         int getVal();
+        bool isExplored();
         void setExplored(bool explored);
         std::vector<AdjEdge*>* getIncidenceEdges(); // vertex method
         void addEdge(AdjEdge* edge);

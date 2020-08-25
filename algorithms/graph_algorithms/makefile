@@ -4,13 +4,13 @@ ODIR = ./bin
 CXX = g++
 CXXFLAGS = -I $(IDIR) -ljsoncpp
 
-_DEPS = GraphAlgorithms.h GraphSearch.h GraphUtils.h
+_DEPS = GraphUtils.h GraphSearch.h GraphAlgorithms.h
 DEPS = $(patsubst %,$(IDIR)/%,$(_DEPS))
 
 # _CODE = GraphAlgorithms.cc GraphSearch.cc GraphUtils.cc GraphMain.cc
 # CODE = $(patsubst %,$(IDIR)/%,$(_CODE))
 
-_OBJ = GraphAlgorithms.o GraphSearch.o GraphUtils.o GraphMain.o
+_OBJ = GraphUtils.o GraphSearch.o GraphAlgorithms.o GraphMain.o
 OBJ = $(patsubst %,$(ODIR)/%,$(_OBJ))
 
 $(ODIR)/%.o: $(IDIR)/%.cc $(DEPS)
