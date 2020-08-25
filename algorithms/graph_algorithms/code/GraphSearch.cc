@@ -17,7 +17,7 @@ AdjVertex* GraphExploration::getFront() {
 
 // BreadthFirstSearch
 BreadthFirstSearch::BreadthFirstSearch(AdjVertex* startVertex) : GraphExploration(startVertex) {
-    std::cout << "initialising BreadthFirstSearch with " << startVertex->getId() << std::endl;
+    /* std::cout << "initialising BreadthFirstSearch with " << startVertex->getId() << std::endl; */
 }
 
 void BreadthFirstSearch::explore() {
@@ -52,7 +52,7 @@ void BreadthFirstSearch::printExploration() {
 
 // DepthFirstSearch
 DepthFirstSearch::DepthFirstSearch(AdjVertex* startVertex) : GraphExploration(startVertex) {
-    std::cout << "initialising DepthFirstSearch with " << startVertex->getId() << std::endl;
+    /* std::cout << "initialising DepthFirstSearch with " << startVertex->getId() << std::endl; */
 }
 
 void DepthFirstSearch::explore() {
@@ -84,3 +84,8 @@ void DepthFirstSearch::printExploration() {
         this->explore();
     }
 }
+
+// example on how pass abstract classes in functions
+/* void exampleExploration(std::shared_ptr<GraphExploration> graph) { */
+/*     graph->printExploration(); */
+/* } */

@@ -16,6 +16,7 @@ class AdjVertex {
     private:
         int id;
         int val;
+        int distance;
         bool explored;
         /* the incidenceEdges vector contains edges where the vertex is
          * in the left position, this is done to deal with edges' direction
@@ -26,6 +27,8 @@ class AdjVertex {
         ~AdjVertex();
         int getId();
         int getVal();
+        int getDistance();
+        void setDistance(int dist);
         bool isExplored();
         void setExplored(bool explored);
         std::vector<AdjEdge*>* getIncidenceEdges(); // vertex method
@@ -50,6 +53,7 @@ class AdjEdge {
         AdjVertex* opposite(AdjVertex* v); // edge method
         bool incidentOn(AdjVertex* v); // edge method
         std::string printEdge();
+        AdjVertex* getFollowing(); // directed edge method
 };
 
 /*

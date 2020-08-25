@@ -5,6 +5,7 @@
 #include <deque>
 #include <iostream>
 #include <string>
+#include <memory>
 
 class GraphExploration { // abstract class
     protected:
@@ -37,5 +38,8 @@ class DepthFirstSearch : public GraphExploration {
         std::string printExplorationStatus() override;
         void printExploration() override;
 };
+
+// example on how pass abstract classes in functions
+/* void exampleExploration(std::shared_ptr<GraphExploration> graph); */
 
 #endif

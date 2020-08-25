@@ -9,6 +9,7 @@
 #include <string>
 #include <sys/stat.h>
 #include <vector>
+#include <memory>
 
 int main(int argc, char* argv[]) {
     std::cout << "-*-*-*START*-*-*-\n\n";
@@ -48,34 +49,20 @@ int main(int argc, char* argv[]) {
     // Get Graph
     AdjacencyList adj_list(const_cast<char*>(inputFile.c_str()));
     std::cout << adj_list.printGraph();
-
-    // debug AdjacencyList methods
     std::map<int,AdjVertex*>* vertecesList = adj_list.getVerteces();
     std::map<int,AdjEdge*>* edgesList = adj_list.getEdges();
-    adj_list.insertVertex();
-    adj_list.insertVertex();
-    adj_list.insertEdge(10,9);
-    adj_list.insertEdge(10,3);
-    adj_list.insertEdge(1,7);
-    adj_list.insertEdge(30,30);
-    std::cout << adj_list.printGraph();
-    std::cout << "incidence 1,7: " << vertecesList->find(1)->second->isIncidentTo(vertecesList->find(7)->second) << std::endl;
-    std::cout << "incidence 5,6: " << vertecesList->find(5)->second->isIncidentTo(vertecesList->find(6)->second) << std::endl;
-    vertecesList->find(1)->second->setExplored(true);
-    vertecesList->find(3)->second->setExplored(true);
-    vertecesList->find(4)->second->setExplored(true);
-    vertecesList->find(8)->second->setExplored(true);
-    std::cout << adj_list.printGraph();
-    adj_list.resetExploration();
-    std::cout << adj_list.printGraph();
 
-    // debug BFS exploration
+    // Experiment1
+    std::cout << "Experiment 1" << std::endl;
     AdjVertex* startVertex = vertecesList->find(1)->second;
-    BreadthFirstSearch bfs(startVertex);
-    bfs.printExploration();
+    AdjVertex* endVertex = vertecesList->find(9)->second;
+    shortestPath_BFS(startVertex, endVertex);
+
+    // Experiment2
+    std::cout << "Experiment 2" << std::endl;
     adj_list.resetExploration();
-    DepthFirstSearch dfs(startVertex);
-    dfs.printExploration();
-    
+    shortestPath_DFS(startVertex, endVertex);
+
+end_experiments:
     std::cout << "\n-*-*-*END*-*-*-\n";
 }

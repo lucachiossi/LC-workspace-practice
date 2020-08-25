@@ -28,6 +28,7 @@ std::string AdjVertex::printVertex() {
 AdjVertex::AdjVertex(int id, int val) {
     this->id = id;
     this->val = val;
+    this->distance = 0;
     this->explored = false;
     this->incidenceEdges = new std::vector<AdjEdge*>();
     // check vertex created
@@ -50,6 +51,14 @@ int AdjVertex::getId() {
 
 int AdjVertex::getVal() {
     return this->val;
+}
+
+int AdjVertex::getDistance() {
+    return this->distance;
+}
+
+void AdjVertex::setDistance(int dist) {
+    this->distance = dist;
 }
 
 bool AdjVertex::isExplored() {
@@ -149,6 +158,10 @@ bool AdjEdge::incidentOn(AdjVertex* v) {
         return true;
     }
     return false;
+}
+
+AdjVertex* AdjEdge::getFollowing() {
+    return this->right;
 }
 
 // Adjacency Linked LIst
@@ -311,6 +324,7 @@ void AdjacencyList::eraseEdge(int id) {
 void AdjacencyList::resetExploration() {
     for(auto it = this->vertecesList->begin(); it != this->vertecesList->end(); it++) {
         it->second->setExplored(false);
+        it->second->setDistance(0);
     }
 }
 
