@@ -84,7 +84,13 @@ void AdjVertex::removeEdge(int idEdge) {
  * check if (this) vertex and (v) vertex have at least a common edge */
 bool AdjVertex::isIncidentTo(AdjVertex* v) {
     for(auto it = this->incidenceEdges->begin(); it != this->incidenceEdges->end(); it++) {
-        if((*it)->incidentOn(v) || (*it)->incidentOn(v)) {
+        if((*it)->incidentOn(v)) {
+            /* std::cout << "found " << (*it)->getId() << std::endl; */
+            return true;
+        }
+    }
+    for(auto it = v->getIncidenceEdges()->begin(); it != v->getIncidenceEdges()->end(); it++) {
+        if((*it)->incidentOn(this)) {
             /* std::cout << "found " << (*it)->getId() << std::endl; */
             return true;
         }
@@ -110,7 +116,6 @@ AdjEdge::AdjEdge(int id, AdjVertex* left, AdjVertex* right, int weight) {
 
 AdjEdge::~AdjEdge() {
     this->left->removeEdge(this->id);
-    this->right->removeEdge(this->id);
     // chwck edge deleted
     /* std::cout << "deleted edge " << this->id << std::endl; */
 }
@@ -220,8 +225,7 @@ AdjacencyList::AdjacencyList(char* jsonInputFile) {
                 AdjEdge* edge = new AdjEdge(this->idEdge, left, right, weight);
                 this->idEdge++;
 
-                left->addEdge(edge);
-                right->addEdge(edge);
+                left->addEdge(edge); // only left as it is considered also the direction
 
                 this->edgesList->emplace(edge->getId(),edge);
             }
@@ -267,9 +271,8 @@ void AdjacencyList::insertEdge(int id_left, int id_right, int weight) {
     AdjVertex* right = r->second;
     AdjEdge* edge = new AdjEdge(this->idEdge, left, right, weight);
     this->idEdge++;
-    // insert new edge into incidence lists of left and right
+    // insert new edge into incidence lists of right as it takes into account direction
     left->addEdge(edge);
-    right->addEdge(edge);
     // insert new edge into edges list
     this->edgesList->emplace(edge->getId(),edge);
     /* std::cout << "added edge " << edge->getId() << " to the graph" << std::endl; */

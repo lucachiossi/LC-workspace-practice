@@ -17,6 +17,9 @@ class AdjVertex {
         int id;
         int val;
         bool explored;
+        /* the incidenceEdges vector contains edges where the vertex is
+         * in the left position, this is done to deal with edges' direction
+         * in directed graphs */
         std::vector<AdjEdge*>* incidenceEdges;
     public:
         AdjVertex(int id, int val=0);

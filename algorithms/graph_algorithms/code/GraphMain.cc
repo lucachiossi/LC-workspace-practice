@@ -70,7 +70,7 @@ int main(int argc, char* argv[]) {
     std::cout << adj_list.printGraph();
 
     // debug BFS exploration
-    AdjVertex* startVertex = vertecesList->find(3)->second;
+    AdjVertex* startVertex = vertecesList->find(1)->second;
     BreadthFirstSearch bfs(startVertex);
     bfs.printExploration();
     adj_list.resetExploration();
