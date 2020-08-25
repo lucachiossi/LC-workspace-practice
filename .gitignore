@@ -3,4 +3,4 @@
 
 # ignore compiled programs
 **/graph_program
-**/graph.json
+**/*.json
