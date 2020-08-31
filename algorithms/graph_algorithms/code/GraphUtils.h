@@ -87,6 +87,7 @@ class AdjacencyList {
         std::string printGraph(std::string message="");
         std::string printVerteces();
         std::string printEdges();
+        std::string printSCC();
 
         /* it is good practive to obtain the linked lists (maps) before
          * applying any algorithm to the graph in order to work with a

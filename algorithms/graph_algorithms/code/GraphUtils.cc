@@ -364,3 +364,15 @@ void AdjacencyList::resetExploration() {
     }
 }
 
+std::string AdjacencyList::printSCC() {
+    std::stringstream str;
+    str << "SCC:";
+
+    for(auto it = this->vertecesList->begin(); it != this->vertecesList->end(); it++) {
+        if(it->second->getLeader() != nullptr) {
+            str << std::endl << "id: " << it->second->getId() << ", leader: " << it->second->getLeader()->getId();
+        }
+    }
+
+    return str.str();
+}

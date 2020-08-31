@@ -82,8 +82,14 @@ void topologicalSort_DFS(std::map<int, AdjVertex*>* vertecesList, std::vector<Ad
 int t = 0;
 AdjVertex* s = nullptr;
 
-void Kosaraju_DFS(AdjacencyList& list, AdjVertex* v) {
-    
+void Kosaraju_DFS(AdjVertex* v) {
+    v->setExplored(true);
+    v->setLeader(s);
+    for(auto it = v->getIncidenceEdges()->begin(); it != v->getIncidenceEdges()->end(); it++) {
+        if(!((*it)->getFollowing()->isExplored())) {
+            Kosaraju_DFS((*it)->getFollowing());
+        }
+    }
 }
 
 void Kosaraju_Algorithm(AdjacencyList& list) {
@@ -92,18 +98,25 @@ void Kosaraju_Algorithm(AdjacencyList& list) {
     for(auto it = edges->begin(); it != edges->end(); it++) {
         it->second->reverse();
     }
+    std::vector<AdjVertex*> topologically_ordered_verteces;
     
     // 2) Topological Ordering on Grev
-    /* topologicalSort_DFS(list.getVerteces()); */
+    topologicalSort_DFS(list.getVerteces(), topologically_ordered_verteces);
     /* std::cout << list.printGraph("labelled graph"); */
     
+    // make G ready
     for(auto it = edges->begin(); it != edges->end(); it++) {
         it->second->reverse();
     }
+    for(auto t = list.getVerteces()->begin(); t != list.getVerteces()->end(); t++) {
+        t->second->setExplored(false);
+    }
     
     // 3) Discover SCCs one by one -> processing nodes in decreasing order of label
-    /* for(auto itt = topologically_ordered_verteces.begin(); itt != topologically_ordered_verteces.end(); itt++) { */
-    /*     s = *itt; */
-    /*     Kosaraju_DFS(list, *itt); */
-    /* } */
+    for(auto itt = topologically_ordered_verteces.begin(); itt != topologically_ordered_verteces.end(); itt++) {
+        s = *itt;
+        if(!(*itt)->isExplored()) {
+            Kosaraju_DFS(*itt);
+        }
+    }
 }

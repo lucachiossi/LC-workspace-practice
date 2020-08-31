@@ -104,11 +104,25 @@ int main(int argc, char* argv[]) {
     adj_list.resetExploration();
 
     // Experiment4
-    AdjacencyList adj_list_kosaraju(const_cast<char*>(inputFile.c_str()));
     std::cout << std::endl << "Experiment 4: SCC - Kosarajus Algorithm" << std::endl;
     c_start = std::clock();
 
-    /* Kosaraju_Algorithm(adj_list_kosaraju, ); */
+    Kosaraju_Algorithm(adj_list);
+
+    c_end = std::clock();
+    time_elapsed_ms = 1000.0 * (c_end-c_start) / CLOCKS_PER_SEC;
+    std::cout << "time: " << time_elapsed_ms << " ms" << std::endl;
+
+    std::cout << adj_list.printGraph("Kosaraju_Algorithm");
+    std::cout << adj_list.printSCC() << std::endl;
+
+    adj_list.resetExploration();
+
+    // Experiment5
+    std::cout << std::endl << "Experiment 5: ... " << std::endl;
+    c_start = std::clock();
+
+    //TODO
 
     c_end = std::clock();
     time_elapsed_ms = 1000.0 * (c_end-c_start) / CLOCKS_PER_SEC;
