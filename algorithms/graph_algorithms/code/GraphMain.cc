@@ -59,22 +59,62 @@ int main(int argc, char* argv[]) {
     std::map<int,AdjEdge*>* edgesList = adj_list.getEdges();
 
     // Experiment1
-    std::cout << "Experiment 1" << std::endl;
-    c_start = std::clock();
-
+    std::cout << "TIME RESULTS WILL DIFFERS WITH FUNCTIONS PRINT" << std::endl;
     AdjVertex* startVertex = vertecesList->find(1)->second;
     AdjVertex* endVertex = vertecesList->find(9)->second;
+
+    std::cout << std::endl << "Experiment 1: BFS" << std::endl;
+    c_start = std::clock();
+
     shortestPath_BFS(startVertex, endVertex);
-    adj_list.resetExploration();
 
     c_end = std::clock();
     time_elapsed_ms = 1000.0 * (c_end-c_start) / CLOCKS_PER_SEC;
     std::cout << "time: " << time_elapsed_ms << " ms" << std::endl;
 
-    // Experiment2
-    std::cout << "Experiment 2" << std::endl;
     adj_list.resetExploration();
+
+    // Experiment2
+    std::cout << std::endl << "Experiment 2: DFS" << std::endl;
+    c_start = std::clock();
+
     shortestPath_DFS(startVertex, endVertex);
+
+    c_end = std::clock();
+    time_elapsed_ms = 1000.0 * (c_end-c_start) / CLOCKS_PER_SEC;
+    std::cout << "time: " << time_elapsed_ms << " ms" << std::endl;
+
+    adj_list.resetExploration();
+
+    // Experiment3
+    std::cout << std::endl << "Experiment 3: Topological Order" << std::endl;
+    c_start = std::clock();
+
+    std::vector<AdjVertex*> topologically_ordered_verteces;
+    topologicalSort_DFS(adj_list.getVerteces(), topologically_ordered_verteces);
+
+    c_end = std::clock();
+    time_elapsed_ms = 1000.0 * (c_end-c_start) / CLOCKS_PER_SEC;
+    std::cout << "time: " << time_elapsed_ms << " ms" << std::endl;
+
+    for(auto itt = topologically_ordered_verteces.begin(); itt != topologically_ordered_verteces.end(); itt++) {
+        std::cout << "vertex " << (*itt)->getId() << " with label " << (*itt)->getLabel() << std::endl;
+    }
+
+    adj_list.resetExploration();
+
+    // Experiment4
+    AdjacencyList adj_list_kosaraju(const_cast<char*>(inputFile.c_str()));
+    std::cout << std::endl << "Experiment 4: SCC - Kosarajus Algorithm" << std::endl;
+    c_start = std::clock();
+
+    /* Kosaraju_Algorithm(adj_list_kosaraju, ); */
+
+    c_end = std::clock();
+    time_elapsed_ms = 1000.0 * (c_end-c_start) / CLOCKS_PER_SEC;
+    std::cout << "time: " << time_elapsed_ms << " ms" << std::endl;
+
+    adj_list.resetExploration();
 
     std::cout << "\n-*-*-*END*-*-*-\n";
 }

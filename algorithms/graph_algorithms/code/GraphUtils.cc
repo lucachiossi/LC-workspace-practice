@@ -15,7 +15,7 @@
 // Adjacency Vertex
 std::string AdjVertex::printVertex() {
     std::stringstream str;
-    str << "vertex(id:" << this->id << ", explored: " << this->explored;
+    str << "vertex(id:" << this->id << ", explored: " << this->explored << ", label: " << this->label;
     str << ", numIncidenceEdges:" << this->incidenceEdges->size();
     std::vector<AdjEdge*>::iterator it;
     for(it = this->incidenceEdges->begin(); it != this->incidenceEdges->end();  it++) {
@@ -29,8 +29,10 @@ AdjVertex::AdjVertex(int id, int val) {
     this->id = id;
     this->val = val;
     this->distance = 0;
+    this->label = 0;
     this->explored = false;
     this->incidenceEdges = new std::vector<AdjEdge*>();
+    this->leader = nullptr;
     // check vertex created
     /* std::cout << "created " << this->printVertex() << std::endl; */
 }
@@ -57,8 +59,28 @@ int AdjVertex::getDistance() {
     return this->distance;
 }
 
+int AdjVertex::getLabel() {
+    return this->label;
+}
+
+AdjVertex* AdjVertex::getLeader() {
+    return this->leader;
+}
+
+/* void AdjVertex::setVal(int val) { */
+/*     this->val = val; */
+/* } */
+
 void AdjVertex::setDistance(int dist) {
     this->distance = dist;
+}
+
+void AdjVertex::setLabel(int label) {
+    this->label = label;
+}
+
+void AdjVertex::setLeader(AdjVertex* leader) {
+    this->leader = leader;
 }
 
 bool AdjVertex::isExplored() {
@@ -162,6 +184,18 @@ bool AdjEdge::incidentOn(AdjVertex* v) {
 
 AdjVertex* AdjEdge::getFollowing() {
     return this->right;
+}
+
+void AdjEdge::reverse() {
+    this->left->removeEdge(this->id);
+
+    AdjVertex* temp = this->left;
+    this->left = this->right;
+    this->right = temp;
+    
+    this->left->addEdge(this);
+
+    this->weight = -(this->weight);
 }
 
 // Adjacency Linked LIst
@@ -325,6 +359,8 @@ void AdjacencyList::resetExploration() {
     for(auto it = this->vertecesList->begin(); it != this->vertecesList->end(); it++) {
         it->second->setExplored(false);
         it->second->setDistance(0);
+        it->second->setLabel(0);
+        it->second->setLeader(nullptr);
     }
 }
 

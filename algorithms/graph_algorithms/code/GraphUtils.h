@@ -1,13 +1,12 @@
 #ifndef GRAPH_UTILS
 #define GRAPH_UTILS
 
-#include <string>
-#define BAD_ARGUMENTS -1
-
 #include <clocale>
 #include <map>
 #include <vector>
 #include <iostream>
+#include <string>
+#define BAD_ARGUMENTS -1
 
 class AdjVertex;
 class AdjEdge;
@@ -17,6 +16,8 @@ class AdjVertex {
         int id;
         int val;
         int distance;
+        int label;
+        AdjVertex* leader;
         bool explored;
         /* the incidenceEdges vector contains edges where the vertex is
          * in the left position, this is done to deal with edges' direction
@@ -28,7 +29,12 @@ class AdjVertex {
         int getId();
         int getVal();
         int getDistance();
+        int getLabel();
+        AdjVertex* getLeader();
+        /* void setVal(int val); */
         void setDistance(int dist);
+        void setLabel(int label);
+        void setLeader(AdjVertex* leader);
         bool isExplored();
         void setExplored(bool explored);
         std::vector<AdjEdge*>* getIncidenceEdges(); // vertex method
@@ -54,6 +60,7 @@ class AdjEdge {
         bool incidentOn(AdjVertex* v); // edge method
         std::string printEdge();
         AdjVertex* getFollowing(); // directed edge method
+        void reverse();
 };
 
 /*
