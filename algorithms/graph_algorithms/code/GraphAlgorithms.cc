@@ -120,3 +120,11 @@ void Kosaraju_Algorithm(AdjacencyList& list) {
         }
     }
 }
+
+// Dijkstra's Shortest Path
+/* 
+ * correct if there are no negative edges
+ * very efficient if using Heap Structures */
+void Dijkstras_Shortest_Path(AdjVertex* start, AdjVertex* end) {
+    //TODO
+}

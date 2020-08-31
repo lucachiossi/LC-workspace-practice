@@ -1,6 +1,7 @@
 #include "GraphUtils.h"
 
 #include <algorithm>
+#include <cstdio>
 #include <fstream>
 #include <iostream>
 #include <iterator>
@@ -127,6 +128,16 @@ bool AdjVertex::isIncidentTo(AdjVertex* v) {
         }
     }
     return false;
+}
+
+struct weight_heap {
+    bool operator()(AdjEdge* a, AdjEdge* b) const{
+        return a->getWeight()>b->getWeight();
+    }
+};
+
+void AdjVertex::makeHeap() {
+        std::make_heap(this->incidenceEdges->begin(), this->incidenceEdges->end(), weight_heap());
 }
 
 // Adjacency Edge
@@ -375,4 +386,12 @@ std::string AdjacencyList::printSCC() {
     }
 
     return str.str();
+}
+
+
+void AdjacencyList::makeIncidenceHeaps() {
+    for(auto it = this->getVerteces()->begin(); it != this->getVerteces()->end(); it++) {
+        it->second->makeHeap();
+    }
+    std::cout << this->printGraph("Heap graph");
 }

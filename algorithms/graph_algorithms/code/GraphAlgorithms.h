@@ -15,5 +15,9 @@ void topologicalSort_DFS(std::map<int, AdjVertex*>* vertecesList, std::vector<Ad
 void Kosaraju_Algorithm(AdjacencyList& list);
 
 // Minimum Cut Problem
+// TODO
+
+// Dijkstra's Shortest Path
+void Dijkstras_Shortest_Path(AdjVertex* start, AdjVertex* end);
 
 #endif

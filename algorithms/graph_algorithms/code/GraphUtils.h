@@ -42,6 +42,7 @@ class AdjVertex {
         void removeEdge(int idEdge);
         bool isIncidentTo(AdjVertex* v); // vertex method
         std::string printVertex();
+        void makeHeap();
 };
 
 class AdjEdge {
@@ -87,7 +88,6 @@ class AdjacencyList {
         std::string printGraph(std::string message="");
         std::string printVerteces();
         std::string printEdges();
-        std::string printSCC();
 
         /* it is good practive to obtain the linked lists (maps) before
          * applying any algorithm to the graph in order to work with a
@@ -109,6 +109,8 @@ class AdjacencyList {
         /* reset exploration status before running any search algorithm in order
          * to have all unexplored verteces and edges */
         void resetExploration();
+        std::string printSCC();
+        void makeIncidenceHeaps();
 };
 
 /*

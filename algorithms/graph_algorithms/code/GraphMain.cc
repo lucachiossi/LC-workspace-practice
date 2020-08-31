@@ -5,6 +5,7 @@
 #include "GraphSearch.h"
 #include "GraphAlgorithms.h"
 
+#include <algorithm>
 #include <iostream>
 #include <string>
 #include <sys/stat.h>
@@ -119,10 +120,15 @@ int main(int argc, char* argv[]) {
     adj_list.resetExploration();
 
     // Experiment5
-    std::cout << std::endl << "Experiment 5: ... " << std::endl;
+    AdjacencyList dij_list(const_cast<char*>(inputFile.c_str()));
+    AdjVertex* dij_start = dij_list.getVerteces()->find(0)->second;
+    AdjVertex* dij_end = dij_list.getVerteces()->find(4)->second;
+    dij_list.makeIncidenceHeaps();
+
+    std::cout << std::endl << "Experiment 5: Dijkstras_Shortest_Path" << std::endl;
     c_start = std::clock();
 
-    //TODO
+    Dijkstras_Shortest_Path(dij_start, dij_end); //TODO
 
     c_end = std::clock();
     time_elapsed_ms = 1000.0 * (c_end-c_start) / CLOCKS_PER_SEC;
