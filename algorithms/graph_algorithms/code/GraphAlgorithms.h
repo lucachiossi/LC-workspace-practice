@@ -14,10 +14,13 @@ void topologicalSort_DFS(std::map<int, AdjVertex*>* vertecesList, std::vector<Ad
 // Strongly Connected Component SCC
 void Kosaraju_Algorithm(AdjacencyList& list);
 
-// Minimum Cut Problem
-// TODO
+// Minimum Cut Problem //TODO
+void Minimum_Cutting_Edge(AdjacencyList& adj_list);
 
 // Dijkstra's Shortest Path
 void Dijkstras_Shortest_Path(AdjacencyList& list, AdjVertex* start, AdjVertex* end);
+
+// Minimum Spanning Tree
+void Prim_Algorithm(AdjacencyList& list);
 
 #endif

@@ -137,5 +137,29 @@ int main(int argc, char* argv[]) {
 
     adj_list.resetExploration();
 
+    // Experiment6
+    std::cout << std::endl << "Experiment 6: Minimum Cut - Random Contraction Algorithm" << std::endl;
+    c_start = std::clock();
+
+    Minimum_Cutting_Edge(adj_list); //TODO
+
+    c_end = std::clock();
+    time_elapsed_ms = 1000.0 * (c_end-c_start) / CLOCKS_PER_SEC;
+    std::cout << "time: " << time_elapsed_ms << " ms" << std::endl;
+
+    adj_list.resetExploration();
+    
+    // Experiment7
+    std::cout << std::endl << "Experiment 7: Prim's Algorithm - Minimum Spanning Tree" << std::endl;
+    c_start = std::clock();
+
+    Prim_Algorithm(adj_list);
+
+    c_end = std::clock();
+    time_elapsed_ms = 1000.0 * (c_end-c_start) / CLOCKS_PER_SEC;
+    std::cout << "time: " << time_elapsed_ms << " ms" << std::endl;
+
+    adj_list.resetExploration();
+
     std::cout << "\n-*-*-*END*-*-*-\n";
 }

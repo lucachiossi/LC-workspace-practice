@@ -4,6 +4,7 @@
 #include <deque>
 #include <iostream>
 #include <vector>
+#include <random>
 
 // BFS Shortest Path
 void shortestPath_BFS(AdjVertex* start, AdjVertex* end) {
@@ -194,4 +195,31 @@ void Dijkstras_Shortest_Path(AdjacencyList& list, AdjVertex* start, AdjVertex* e
         heap.pop_back();
     }
     std::cout << "found shortest path with length " << current.distance_from_start << ", previous " << current.previous_vertex->getId();
+}
+
+// Random Contraction Algorithm //TODO
+void Minimum_Cutting_Edge(AdjacencyList& adj_list) {
+    std::map<int,AdjVertex*>* verteces = adj_list.getVerteces();
+    std::default_random_engine generator;
+    std::uniform_int_distribution<int> distribution(0, verteces->size());
+    auto start_it = verteces->begin();
+    for(int i = 0; i < distribution(generator); i++) {
+        start_it++;
+    }
+    AdjVertex* current = start_it->second;
+    std::cout << "start with node: " << current->getId() << std::endl;
+
+    /* while(current != nullptr) { */
+    /*     std::vector<AdjEdge*>* edges = current->getIncidenceEdges(); */
+    /*     std::uniform_int_distribution<int> edge_distribution(0,edges->size()); */
+    /*     int edge_to_collapse = edge_distribution(generator); */
+    /*     AdjEdge* edge = *(edges->begin()+edge_to_collapse); */
+    /*     AdjVertex* next = edge->getFollowing(); */
+    /*     std::cout << "collapse " << current->getId() << " with " << next->getId() << std::endl; */
+    /* } */
+}
+
+// Minimum Spanning Tree
+void Prim_Algorithm(AdjacencyList& list) {
+
 }
