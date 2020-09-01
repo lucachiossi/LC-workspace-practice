@@ -152,6 +152,7 @@ AdjEdge::AdjEdge(int id, AdjVertex* left, AdjVertex* right, int weight) {
     this->left = left;
     this->right = right;
     this->weight = weight; 
+    this->crossing = false;
     // check edge created
     /* std::cout << "created " << this->printEdge() << std::endl; */
 }
@@ -169,6 +170,14 @@ int AdjEdge::getId() {
 
 int AdjEdge::getWeight() {
     return this->weight;
+}
+
+bool AdjEdge::isCrossing() {
+    return this->crossing;
+}
+
+void AdjEdge::setCrossing(bool crossing) {
+    this->crossing = crossing;
 }
 
 std::pair<AdjVertex*,AdjVertex*> AdjEdge::endVerteces() {
@@ -373,6 +382,9 @@ void AdjacencyList::resetExploration() {
         it->second->setLabel(0);
         it->second->setLeader(nullptr);
     }
+    for(auto it = this->edgesList->begin(); it != this->edgesList->end(); it++) {
+        it->second->setCrossing(false);
+    }
 }
 
 std::string AdjacencyList::printSCC() {
@@ -393,5 +405,4 @@ void AdjacencyList::makeIncidenceHeaps() {
     for(auto it = this->getVerteces()->begin(); it != this->getVerteces()->end(); it++) {
         it->second->makeHeap();
     }
-    std::cout << this->printGraph("Heap graph");
 }

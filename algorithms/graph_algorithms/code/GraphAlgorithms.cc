@@ -1,5 +1,6 @@
 #include "GraphAlgorithms.h"
 
+#include <algorithm>
 #include <deque>
 #include <iostream>
 #include <vector>
@@ -99,11 +100,11 @@ void Kosaraju_Algorithm(AdjacencyList& list) {
         it->second->reverse();
     }
     std::vector<AdjVertex*> topologically_ordered_verteces;
-    
+
     // 2) Topological Ordering on Grev
     topologicalSort_DFS(list.getVerteces(), topologically_ordered_verteces);
     /* std::cout << list.printGraph("labelled graph"); */
-    
+
     // make G ready
     for(auto it = edges->begin(); it != edges->end(); it++) {
         it->second->reverse();
@@ -111,7 +112,7 @@ void Kosaraju_Algorithm(AdjacencyList& list) {
     for(auto t = list.getVerteces()->begin(); t != list.getVerteces()->end(); t++) {
         t->second->setExplored(false);
     }
-    
+
     // 3) Discover SCCs one by one -> processing nodes in decreasing order of label
     for(auto itt = topologically_ordered_verteces.begin(); itt != topologically_ordered_verteces.end(); itt++) {
         s = *itt;
@@ -125,6 +126,72 @@ void Kosaraju_Algorithm(AdjacencyList& list) {
 /* 
  * correct if there are no negative edges
  * very efficient if using Heap Structures */
-void Dijkstras_Shortest_Path(AdjVertex* start, AdjVertex* end) {
-    //TODO
+struct heap_element {
+    AdjVertex* vertex;
+    int distance_from_start;
+    AdjVertex* previous_vertex;    
+};
+
+struct order_heap {
+    bool operator()(struct heap_element a, struct heap_element b) const{
+        return a.distance_from_start>b.distance_from_start;
+    }
+};
+
+void Dijkstras_Shortest_Path(AdjacencyList& list, AdjVertex* start, AdjVertex* end) {
+    std::vector<heap_element> heap;
+    struct heap_element elem;
+
+    elem.vertex = start;
+    elem.distance_from_start = 0;
+    elem.previous_vertex = nullptr;
+
+    heap.push_back(elem);
+    std::make_heap(heap.begin(), heap.end(), order_heap());
+
+    struct heap_element current = heap.front();
+    AdjVertex* exploringVertex = current.vertex;
+    std::pop_heap(heap.begin(), heap.end(), order_heap());
+    heap.pop_back();
+
+    while(exploringVertex->getId() != end->getId()) {
+        exploringVertex->setExplored(true);
+        std::cout << "exploring node " << exploringVertex->getId() << std::endl;
+        for(auto it = exploringVertex->getIncidenceEdges()->begin(); it != exploringVertex->getIncidenceEdges()->end(); it++) {
+            AdjVertex* following = (*it)->getFollowing();
+            if(!following->isExplored()) {
+                std::cout << "edge " << following->getId() << std::endl;
+                struct heap_element temp;
+                temp.vertex = following;
+                temp.distance_from_start = (*it)->getWeight() + current.distance_from_start;
+                temp.previous_vertex = exploringVertex; 
+
+                // if using an heap, it has to be updated when encountering new crossing edges
+                // (with new inserts or updates)
+                bool insert = true;
+                for(auto itt = heap.begin(); itt != heap.end(); itt++) {
+                    if((*itt).vertex->getId() == temp.vertex->getId()) {
+                        if((*itt).distance_from_start > temp.distance_from_start) {
+                            std::cout << "updating distance and previous of node " << (*itt).vertex->getId() << std::endl;
+                            heap.erase(itt);
+                            break;
+                        }
+                        else
+                            insert = false;
+                    }
+                }
+
+                if(insert) {
+                    std::cout << "inserting in heap " << temp.vertex->getId() << ", distance " << temp.distance_from_start << std::endl;
+                    heap.push_back(temp);
+                    std::push_heap(heap.begin(), heap.end(), order_heap());
+                }
+            }
+        }
+        current = heap.front();
+        exploringVertex = current.vertex;
+        std::pop_heap(heap.begin(), heap.end(), order_heap());
+        heap.pop_back();
+    }
+    std::cout << "found shortest path with length " << current.distance_from_start << ", previous " << current.previous_vertex->getId();
 }

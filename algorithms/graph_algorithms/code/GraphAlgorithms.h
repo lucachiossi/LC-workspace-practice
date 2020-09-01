@@ -18,6 +18,6 @@ void Kosaraju_Algorithm(AdjacencyList& list);
 // TODO
 
 // Dijkstra's Shortest Path
-void Dijkstras_Shortest_Path(AdjVertex* start, AdjVertex* end);
+void Dijkstras_Shortest_Path(AdjacencyList& list, AdjVertex* start, AdjVertex* end);
 
 #endif

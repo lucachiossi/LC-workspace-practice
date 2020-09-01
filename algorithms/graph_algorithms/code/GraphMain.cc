@@ -122,13 +122,14 @@ int main(int argc, char* argv[]) {
     // Experiment5
     AdjacencyList dij_list(const_cast<char*>(inputFile.c_str()));
     AdjVertex* dij_start = dij_list.getVerteces()->find(0)->second;
-    AdjVertex* dij_end = dij_list.getVerteces()->find(4)->second;
-    dij_list.makeIncidenceHeaps();
+    AdjVertex* dij_end = dij_list.getVerteces()->find(9)->second;
+    /* dij_list.makeIncidenceHeaps(); */
+    /* std::cout << dij_list.printGraph("Heap graph"); */
 
     std::cout << std::endl << "Experiment 5: Dijkstras_Shortest_Path" << std::endl;
     c_start = std::clock();
 
-    Dijkstras_Shortest_Path(dij_start, dij_end); //TODO
+    Dijkstras_Shortest_Path(dij_list, dij_start, dij_end);
 
     c_end = std::clock();
     time_elapsed_ms = 1000.0 * (c_end-c_start) / CLOCKS_PER_SEC;

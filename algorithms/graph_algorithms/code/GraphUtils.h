@@ -51,11 +51,14 @@ class AdjEdge {
         int weight;
         AdjVertex* left;
         AdjVertex* right;
+        bool crossing;
     public:
         AdjEdge(int id, AdjVertex* left, AdjVertex* right, int weight=1);
         ~AdjEdge();
         int getId();
         int getWeight();
+        bool isCrossing();
+        void setCrossing(bool crossing);
         std::pair<AdjVertex*,AdjVertex*> endVerteces(); // edge method
         AdjVertex* opposite(AdjVertex* v); // edge method
         bool incidentOn(AdjVertex* v); // edge method
