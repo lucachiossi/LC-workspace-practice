@@ -12,9 +12,12 @@
 #include <vector>
 #include <memory>
 #include <ctime>
+#include <chrono>
 
 int main(int argc, char* argv[]) {
+    // Start Experiments
     std::cout << "-*-*-*START*-*-*-\n\n";
+    std::chrono::system_clock::time_point start_experiments = std::chrono::system_clock::now();
 
     std::string errorCallMessage = "graph_program <input-file> m|ll <experiment-number>";
 
@@ -173,5 +176,24 @@ int main(int argc, char* argv[]) {
 
     adj_list.resetExploration();
 
-    std::cout << "\n-*-*-*END*-*-*-\n";
+    // Experiment9
+    std::cout << std::endl << "Experiment 9: .." << std::endl;
+    c_start = std::clock();
+
+    //TODO
+
+    c_end = std::clock();
+    time_elapsed_ms = 1000.0 * (c_end-c_start) / CLOCKS_PER_SEC;
+    std::cout << "time: " << time_elapsed_ms << " ms" << std::endl;
+
+    adj_list.resetExploration();
+
+    // End Experiments
+    std::chrono::system_clock::time_point end_experiments = std::chrono::system_clock::now();
+    std::time_t tt;
+    tt = std::chrono::system_clock::to_time_t(start_experiments);
+    std::cout << "\nstart: " << ctime(&tt);
+    tt = std::chrono::system_clock::to_time_t(end_experiments);
+    std::cout << "end: " << ctime(&tt);
+    std::cout << "-*-*-*END*-*-*-\n";
 }
