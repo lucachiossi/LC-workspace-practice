@@ -220,6 +220,47 @@ void Minimum_Cutting_Edge(AdjacencyList& adj_list) {
 }
 
 // Minimum Spanning Tree
-void Prim_Algorithm(AdjacencyList& list) {
+struct compare_edges {
+    bool operator()(AdjEdge* a, AdjEdge* b) const{
+        return ((a->getWeight()>b->getWeight() && !(b->getFollowing()->isExplored())) || 
+                (a->getFollowing()->isExplored() && !(b->getFollowing()->isExplored())) ||
+                (a->getWeight()>b->getWeight() && (a->getFollowing()->isExplored())));
+    }
+};
 
+void Prim_Algorithm(AdjacencyList& list) {
+    std::vector<AdjEdge*> spanning_tree;
+
+    std::default_random_engine generator;
+    std::uniform_int_distribution<int> distribution(0,list.getVerteces()->size()-1);
+    int start_vertex = distribution(generator);
+
+    std::map<int,AdjVertex*>::iterator start_it = list.getVerteces()->begin();
+    for(int i = 0; i < start_vertex; i++) {
+        start_it++;
+    }
+
+    AdjVertex* current = start_it->second;
+    int spanned_verteces = 1;
+    /* std::cout << "start with vertex: " << current->getId() << std::endl; */
+
+    std::vector<AdjEdge*> crossing_edges;
+    while(spanned_verteces != list.getVerteces()->size()) {
+        current->setExplored(true);
+        for(auto it = current->getIncidenceEdges()->begin(); it != current->getIncidenceEdges()->end(); it++) {
+            crossing_edges.push_back(*it);
+        }
+        std::make_heap(crossing_edges.begin(), crossing_edges.end(), compare_edges());
+
+        AdjEdge* spanning_edge = crossing_edges.front();
+        spanning_tree.push_back(spanning_edge);
+        current = spanning_edge->getFollowing();
+        /* std::cout << "going to " << current->getId() << "edge " << spanning_edge->getId() << std::endl; */
+        spanned_verteces++;
+    }
+
+    std::cout << "SPANNING TREE:\n";
+    for(auto it = spanning_tree.begin(); it != spanning_tree.end(); it++) {
+        std::cout << "edge " << (*it)->getId() << std::endl;
+    }
 }
