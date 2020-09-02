@@ -206,6 +206,10 @@ AdjVertex* AdjEdge::getFollowing() {
     return this->right;
 }
 
+AdjVertex* AdjEdge::getPrevious() {
+    return this->left;
+}
+
 void AdjEdge::reverse() {
     this->left->removeEdge(this->id);
 

@@ -64,6 +64,7 @@ class AdjEdge {
         bool incidentOn(AdjVertex* v); // edge method
         std::string printEdge();
         AdjVertex* getFollowing(); // directed edge method
+        AdjVertex* getPrevious(); // directed edge method
         void reverse();
 };
 

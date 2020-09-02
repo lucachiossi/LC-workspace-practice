@@ -161,5 +161,17 @@ int main(int argc, char* argv[]) {
 
     adj_list.resetExploration();
 
+    // Experiment8
+    std::cout << std::endl << "Experiment 8: Kruskal's Algorithm - Minimum Spanning Tree" << std::endl;
+    c_start = std::clock();
+
+    Kruskal_Algorithm(adj_list);
+
+    c_end = std::clock();
+    time_elapsed_ms = 1000.0 * (c_end-c_start) / CLOCKS_PER_SEC;
+    std::cout << "time: " << time_elapsed_ms << " ms" << std::endl;
+
+    adj_list.resetExploration();
+
     std::cout << "\n-*-*-*END*-*-*-\n";
 }

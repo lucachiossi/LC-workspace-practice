@@ -22,5 +22,6 @@ void Dijkstras_Shortest_Path(AdjacencyList& list, AdjVertex* start, AdjVertex* e
 
 // Minimum Spanning Tree
 void Prim_Algorithm(AdjacencyList& list);
+void Kruskal_Algorithm(AdjacencyList& list);
 
 #endif
