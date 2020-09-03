@@ -177,10 +177,61 @@ int main(int argc, char* argv[]) {
     adj_list.resetExploration();
 
     // Experiment9
-    std::cout << std::endl << "Experiment 9: .." << std::endl;
+    std::string s = "./not_weighted_undirected_graph.json";
+    AdjacencyList path_graph(const_cast<char*>(s.c_str()));
+    path_graph.eraseVertex(5);
+    path_graph.eraseVertex(8);
+    path_graph.eraseEdge(0);
+    path_graph.eraseEdge(2);
+    path_graph.eraseEdge(3);
+    path_graph.eraseEdge(4);
+    path_graph.eraseEdge(5);
+    path_graph.eraseEdge(6);
+    path_graph.eraseEdge(8);
+    path_graph.eraseEdge(10);
+    path_graph.eraseEdge(11);
+    path_graph.eraseEdge(12);
+    path_graph.eraseEdge(13);
+    path_graph.eraseEdge(16);
+    path_graph.eraseEdge(17);
+    path_graph.eraseEdge(22);
+    path_graph.eraseEdge(23);
+    path_graph.eraseEdge(24);
+    path_graph.eraseEdge(25);
+    path_graph.eraseEdge(26);
+    path_graph.eraseEdge(31);
+
+    path_graph.getVerteces()->find(9)->second->setVal(5);
+    path_graph.getVerteces()->find(2)->second->setVal(1);
+    path_graph.getVerteces()->find(1)->second->setVal(1);
+    path_graph.getVerteces()->find(7)->second->setVal(1);
+    path_graph.getVerteces()->find(4)->second->setVal(4);
+    path_graph.getVerteces()->find(0)->second->setVal(6);
+    path_graph.getVerteces()->find(3)->second->setVal(3);
+    path_graph.getVerteces()->find(6)->second->setVal(4);
+
+    std::cout << path_graph.printGraph("path graph") << std::endl;
+
+    AdjVertex* start_path_graph = path_graph.getVerteces()->find(9)->second;
+    AdjVertex* end_path_graph = path_graph.getVerteces()->find(6)->second;
+    
+    std::cout << std::endl << "Experiment 9: the Path Graph problem - Dynamic Programming" << std::endl;
     c_start = std::clock();
 
-    //TODO
+    WIT_PathGraph(path_graph, start_path_graph, end_path_graph);
+
+    c_end = std::clock();
+    time_elapsed_ms = 1000.0 * (c_end-c_start) / CLOCKS_PER_SEC;
+    std::cout << "time: " << time_elapsed_ms << " ms" << std::endl;
+
+    // Experiment10
+    std::cout << std::endl << "Experiment 10: sequence alignment problem - Dynamic Programming" << std::endl;
+    c_start = std::clock();
+
+    std::string string1 = "abcd";
+    std::string string2 = "afd";
+
+    SequenceAlignmentProblem(string1, string2);
 
     c_end = std::clock();
     time_elapsed_ms = 1000.0 * (c_end-c_start) / CLOCKS_PER_SEC;

@@ -31,7 +31,7 @@ class AdjVertex {
         int getDistance();
         int getLabel();
         AdjVertex* getLeader();
-        /* void setVal(int val); */
+        void setVal(int val);
         void setDistance(int dist);
         void setLabel(int label);
         void setLeader(AdjVertex* leader);

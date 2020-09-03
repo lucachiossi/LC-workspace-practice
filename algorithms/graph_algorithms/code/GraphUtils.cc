@@ -17,7 +17,7 @@
 std::string AdjVertex::printVertex() {
     std::stringstream str;
     str << "vertex(id:" << this->id << ", explored: " << this->explored << ", label: " << this->label;
-    str << ", numIncidenceEdges:" << this->incidenceEdges->size();
+    str << ", val: " << this->val << ", numIncidenceEdges:" << this->incidenceEdges->size();
     std::vector<AdjEdge*>::iterator it;
     for(it = this->incidenceEdges->begin(); it != this->incidenceEdges->end();  it++) {
         str << ", " << (*it)->getId();
@@ -68,9 +68,9 @@ AdjVertex* AdjVertex::getLeader() {
     return this->leader;
 }
 
-/* void AdjVertex::setVal(int val) { */
-/*     this->val = val; */
-/* } */
+void AdjVertex::setVal(int val) {
+    this->val = val;
+}
 
 void AdjVertex::setDistance(int dist) {
     this->distance = dist;

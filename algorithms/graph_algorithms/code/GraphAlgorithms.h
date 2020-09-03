@@ -24,4 +24,12 @@ void Dijkstras_Shortest_Path(AdjacencyList& list, AdjVertex* start, AdjVertex* e
 void Prim_Algorithm(AdjacencyList& list);
 void Kruskal_Algorithm(AdjacencyList& list);
 
+// Dinamic Programming
+void WIT_PathGraph(AdjacencyList& list, AdjVertex* start, AdjVertex* end);
+    /* it is interesting to see the following algorithm as the
+     * possible optimal scenarios are 3 */
+void SequenceAlignmentProblem(std::string& string1, std::string& string2);
+
+// NP-Complete Problems
+
 #endif

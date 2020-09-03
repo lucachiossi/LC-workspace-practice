@@ -2,10 +2,12 @@
 
 #include <algorithm>
 #include <deque>
+#include <ios>
 #include <iostream>
 #include <vector>
 #include <random>
 #include <set>
+#include <string.h>
 
 // BFS Shortest Path
 void shortestPath_BFS(AdjVertex* start, AdjVertex* end) {
@@ -327,25 +329,168 @@ void Kruskal_Algorithm(AdjacencyList& list) {
             }
         }
         else {
-           if(previous_set == following_set) {
-               /* std::cout << "do nothing" << std::endl; */
-           } 
-           else {
-               /* std::cout << "merge sets" << std::endl; */
-               std::set<AdjVertex*>& previousSet = union_find.at(previous_set);
-               std::set<AdjVertex*>& followingSet = union_find.at(following_set);
-               std::set<AdjVertex*> set;
-               std::merge(previousSet.begin(),previousSet.end(),followingSet.begin(),followingSet.end(),std::inserter(set,set.begin()));
-               union_find.erase(union_find.begin()+previous_set);
-               union_find.erase(union_find.begin()+following_set);
-               union_find.emplace_back(set.begin(),set.end());
-               spanning_tree.push_back(current);
-           }
+            if(previous_set == following_set) {
+                /* std::cout << "do nothing" << std::endl; */
+            } 
+            else {
+                /* std::cout << "merge sets" << std::endl; */
+                std::set<AdjVertex*>& previousSet = union_find.at(previous_set);
+                std::set<AdjVertex*>& followingSet = union_find.at(following_set);
+                std::set<AdjVertex*> set;
+                std::merge(previousSet.begin(),previousSet.end(),followingSet.begin(),followingSet.end(),std::inserter(set,set.begin()));
+                union_find.erase(union_find.begin()+previous_set);
+                union_find.erase(union_find.begin()+following_set);
+                union_find.emplace_back(set.begin(),set.end());
+                spanning_tree.push_back(current);
+            }
         }
     }
 
     std::cout << "SPANNING TREE" << std::endl;
     for(auto it = spanning_tree.begin(); it != spanning_tree.end(); it++) {
         std::cout << "edge: " << (*it)->getId() << std::endl;
+    }
+}
+
+// Path Graph -> graph with 2 verteces with degree 1 and all the others with degree 2
+void WIT_PathGraph(AdjacencyList& list, AdjVertex* start, AdjVertex* end) {
+    std::cout << "find Optimal Value" << std::endl;
+    int dim = list.getVerteces()->size();
+    int weights[dim+1];
+    std::vector<AdjVertex*> exploring_status;
+    weights[0] = 0;
+    weights[1] = start->getVal();
+    exploring_status.push_back(start);
+    AdjVertex* current = (*start->getIncidenceEdges()->begin())->getFollowing();
+    for(int i = 2; i <= dim; i++) {
+        exploring_status.push_back(current);
+        std::cout << "exploring " << current->getId() << std::endl;
+        if(weights[i-2]+current->getVal() > weights[i-1]) {
+            weights[i] = weights[i-2]+current->getVal();
+        }
+        else {
+            weights[i] = weights[i-1];
+        }
+        current = (*current->getIncidenceEdges()->begin())->getFollowing();
+    }
+
+    std::cout << "exploring status:";
+    for(auto it = exploring_status.begin(); it != exploring_status.end(); it++) {
+        std::cout << " " << (*it)->getId();
+    }
+    std::cout << std::endl;
+
+    std::cout << "weight sums:";
+    for(int i = 0; i <= dim; i++) {
+        std::cout << " " << weights[i];    
+    }
+    std::cout << std::endl;
+
+    std::cout << "find Optimal Solution" << std::endl;
+    std::vector<AdjVertex*> optimalSolution;
+    int i = dim;
+    while(i>=1) {
+        int weight_i = exploring_status.at(i-1)->getVal();
+        /* std::cout << "weight_i" << weight_i; */
+        std::cout << "weights[i-2]: " << weights[i-2] << std::endl;
+        if(weights[i-1] >= weights[i-2]+weight_i) {
+            i-=1;
+        }
+        else {
+            optimalSolution.push_back(exploring_status.at(i-1));
+            i-=2;
+        }
+    }
+
+    std::cout << "optimal solution:";
+    for(auto it = optimalSolution.begin(); it != optimalSolution.end(); it++) {
+        std::cout << " " << (*it)->getId();
+    }
+    std::cout << std::endl;
+}
+
+int get_alfa(std::string& string1, std::string& string2) {
+    int alfa_gap = 1;
+    int alfa_mismatch = 1;
+
+    char* str1 = const_cast<char*>(string1.c_str());
+    char* str2 = const_cast<char*>(string2.c_str());
+
+
+    int size1 = strlen(str1);
+    int size2 = strlen(str2);
+    std::cout << "size1: " << size1 << ", size2: " << size2 << std::endl;
+
+    int cycle;
+    if(size1 > size2) {
+        cycle = size1;
+    }
+    else {
+        cycle = size2;
+    }
+
+    int alfa = 0;
+    for(int i = 0; i < cycle; i++) {
+        if(i >= size1 || i > size2) {
+            alfa += alfa_gap;
+        }
+        else {
+            if(str1[i] == str2[i]) {
+                alfa += 0;
+            }
+            else if(str1[i] == '0' || str2[i] == '0') {
+                alfa += alfa_gap;
+            }
+            else {
+                alfa += alfa_mismatch;
+            }
+        }
+    }
+
+    std::cout << "mismatch of " << str1 << " and " << str2 << ": " << alfa << std::endl;
+    return alfa;
+}
+
+
+void SequenceAlignmentProblem(std::string& string1, std::string& string2) {
+    int A[string1.length()][string2.length()];
+    // get values
+    std::cout << "get alfa evaluations" << std::endl;
+    std::string temp1;
+    std::string temp2;
+    for(int i = 0; i < string1.length(); i++) {
+        temp1.assign(string1,0,i+1);
+        temp2.assign(string2,0,1);
+        A[i][0] = get_alfa(temp1,temp2);
+    }
+    for(int j = 0; j < string2.length(); j++) {
+        temp1.assign(string1,0,1);
+        temp2.assign(string2,0,j+1);
+        A[0][j] = get_alfa(temp1,temp2);
+    }
+    for(int i = 1; i < string1.length(); i++) {
+        for(int j = 1; j < string2.length(); j++) {
+            std::cout << "iter" << std::endl;
+            temp1.assign(string1,0,i+1);
+            temp2.assign(string2,0,j+1);
+            std::vector<int> min;
+            std::make_heap(min.begin(), min.end());
+            min.push_back(get_alfa(temp1, temp2)+A[i-1][j-1]); std::push_heap(min.begin(), min.end());
+            temp1.assign(string1,0,i);
+            temp2.assign(string1,0,j+1);
+            min.push_back(get_alfa(temp1, temp2)); std::push_heap(min.begin(), min.end());
+            temp1.assign(string1,0,i+1);
+            temp2.assign(string1,0,j);
+            min.push_back(get_alfa(temp1, temp2)); std::push_heap(min.begin(), min.end());
+            A[i][j] = min.front();
+        }
+    }
+    // print values
+    std::cout << "penalties:\n";
+    for(int i = 0; i < string1.length(); i++) {
+        for(int j = 0; j < string2.length(); j++) {
+            std::cout << A[i][j] << " ";
+        }
+        std::cout << std::endl;
     }
 }
