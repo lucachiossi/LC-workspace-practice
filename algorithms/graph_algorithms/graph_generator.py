@@ -6,6 +6,10 @@ input: <file-name> d|nd <max-node-number> <max-neighbors-per-node> we|nwe
 
 output: <file-name>.json
 """
+# pylint: disable-msg=too-many-locals
+# pylint: disable-msg=too-many-branches
+# pylint: disable-msg=too-many-statements
+# pylint: disable-msg=too-many-nested-blocks
 
 import sys
 from pathlib import Path

@@ -1,11 +1,13 @@
 """
 CSV generator to exercise with data analysis example
 """
+# pylint: disable-msg=too-many-locals
+# pylint: disable-msg=too-many-locals
 
 import sys
 # import json
 import csv
-# import random
+import random
 # import itertools
 import pathlib
 import time
@@ -29,46 +31,69 @@ def main():
     except ValueError:
         print('bad cols or rows\n{0}'.format(bad_input_message))
         sys.exit()
-    print('generate csv files with {0} cols and {1} rows'.format(cols, rows))
+    print('cols: {0} rows: {1}'.format(cols, rows))
 
     out_file_name = pathlib.Path(sys.argv[3])
     if not out_file_name.parent.is_dir:
         print('bad filename\n{0}'.format(bad_input_message))
         sys.exit()
-    print('save result to file {0}'.format(out_file_name))
+    print('filename: {0}'.format(out_file_name))
 
     # define data format
     names = ['Luca', 'Alberto', 'Davide', 'Marco', 'Federico', 'Giuseppe']
     surnames = ['rossi', 'verdi', 'neri', 'bianchi', 'arancioni', 'blu']
     float_range = [1.0, 1000000.0]
-    int_range = [1, 100]
-    times = time.localtime(time.time())
+    int_range = [1, 1000]
+
+    def fun_float():
+        return random.uniform(float_range[0], float_range[1])
+
+    def fun_int():
+        return random.randint(int_range[0], int_range[1])
+
+    def fun_names():
+        return names[random.randint(0, len(names)-1)]
+
+    def fun_surnames():
+        return surnames[random.randint(0, len(surnames)-1)]
+
+    def fun_time():
+        return int(round(time.time() * 1000))
 
     data = {
-        'float numbers': float_range,
-        'names': names,
-        'int numbers': int_range,
-        'surnames': surnames,
-        'time': times
+        'float numbers': fun_float,
+        'names': fun_names,
+        'int numbers': fun_int,
+        'surnames': fun_surnames,
+        'time': fun_time
         }
-    print(data)
+
     # create matrix representing csv file rows
     file_output = [[0 for x in range(cols)]for y in range(rows)]
 
-    lst = list(range(cols))
-    print(lst[0::4])
-    # for ind in range(cols):
+    lst = list(range(cols-int(cols % len(data.keys()))))
+    for ind_col in lst[0::len(data.keys())]:
+        for ind_col_shift in range(len(data.keys())):
+            file_output[0][ind_col+ind_col_shift] = \
+                    list(data.keys())[ind_col_shift]
 
-    # for x_ind in range(cols/4):
-    #     for y_ind in range(rows):
-    #         file_output[x_ind][y_ind] = \
-    #             random.uniform(data['float numbers'][0],
-    #                            data['float numbers'][1])
+    for ind_row in range(1, rows):
+        for ind_col in lst[0::len(data.keys())]:
+            for ind_col_shift in range(len(data.keys())):
+                file_output[ind_row][ind_col+ind_col_shift] = \
+                        data[list(data.keys())[ind_col_shift]]()
 
-    # for x_ind in range(rows):
-    #     for y_ind in range(cols):
-    #         print(file_output[x_ind][y_ind])
-    # print(file_output)
+    last_indeces_start = cols-int(cols % len(data.keys()))
+    for final_ind in range(last_indeces_start, cols):
+        file_output[0][final_ind] = \
+                list(data.keys())[final_ind-last_indeces_start]
+
+    for ind_row in range(1, rows):
+        for final_ind in range(last_indeces_start, cols):
+            file_output[ind_row][final_ind] = \
+                    data[list(data.keys())[final_ind-last_indeces_start]]()
+
+    print(file_output)
 
     # save matrix to the csv file
     if out_file_name.suffix != 'csv':
@@ -78,7 +103,6 @@ def main():
 
     csv_writer = csv.writer(out, delimiter=',', quotechar='"',
                             quoting=csv.QUOTE_MINIMAL)
-
     csv_writer.writerows(file_output)
 
     out.close()
