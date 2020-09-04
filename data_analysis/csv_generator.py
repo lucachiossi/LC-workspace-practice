@@ -17,6 +17,7 @@ def main():
     """
     main function
     """
+    start = time.time()
     input_format = str('cols rows filename')
     bad_input_message = str('call as: csv_generator.py ') + input_format
 
@@ -101,11 +102,15 @@ def main():
 
     out = open(str(out_file_name), "w")
 
+    print('saving to {}'.format(str(out_file_name)))
     csv_writer = csv.writer(out, delimiter=',', quotechar='"',
                             quoting=csv.QUOTE_MINIMAL)
     csv_writer.writerows(file_output)
 
     out.close()
+
+    end = time.time()
+    print('time: {}'.format(end-start))
 
 
 if __name__ == "__main__":

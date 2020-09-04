@@ -1,3 +1,6 @@
+"""
+BASIC SCRIPT for DATA ANALYSIS
+"""
 # import pandas as pd
 # import matplotlib.pyplot as plt
 # import seaborn as sns
@@ -13,8 +16,21 @@
 # from statsmodels.stats.outliers_influence import variance_inflation_factor
 # from sklearn.tree import DecisionTreeRegressor
 
-# Get input and show it
+def main():
+    """
+    main function
+    """
+    input_format = str('cols rows filename')
+    bad_input_message = str('call as: csv_generator.py ') + input_format
+
+    # get user input
+    if len(sys.argv) < 4:
+        print(bad_input_message)
+        sys.exit()
 
 # Filter input
 
 # Make graphs
+
+if __name__ == "__main__":
+    main()

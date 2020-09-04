@@ -17,6 +17,7 @@ def main():
     """
     main function
     """
+    start = time.time()
     input_format = str('cols rows filename')
     bad_input_message = str('call as: json_generator.py ') + input_format
 
@@ -95,15 +96,21 @@ def main():
         'tags': tags,
         'values': values
     }
-    print(file_output)
+    # print(file_output)
 
     # save matrix to the json file
     if out_file_name.suffix != 'json':
         out_file_name = pathlib.Path(str(out_file_name)+'.json')
 
     out = open(str(out_file_name), "w")
+
+    print('saving to {}'.format(str(out_file_name)))
     json.dump(file_output, out)
+
     out.close()
+
+    end = time.time()
+    print('time: {}'.format(end-start))
 
 
 if __name__ == "__main__":
