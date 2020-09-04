@@ -1,12 +1,12 @@
 """
-CSV generator to exercise with data analysis example
+JSON generator to exercise with data analysis example
 """
 # pylint: disable-msg=too-many-locals
 # pylint: disable-msg=too-many-locals
 
 import sys
-# import json
-import csv
+import json
+# import csv
 import random
 # import itertools
 import pathlib
@@ -18,7 +18,7 @@ def main():
     main function
     """
     input_format = str('cols rows filename')
-    bad_input_message = str('call as: csv_generator.py ') + input_format
+    bad_input_message = str('call as: json_generator.py ') + input_format
 
     # get user input
     if len(sys.argv) < 4:
@@ -68,43 +68,41 @@ def main():
         'time': fun_time
         }
 
-    # create matrix representing csv file rows
-    file_output = [[0 for x in range(cols)]for y in range(rows)]
+    # create matrix representing json file rows
+    tags = list()
 
     lst = list(range(cols-int(cols % len(data.keys()))))
-    for ind_col in lst[0::len(data.keys())]:
+    for _ in lst[0::len(data.keys())]:
         for ind_col_shift in range(len(data.keys())):
-            file_output[0][ind_col+ind_col_shift] = \
-                    list(data.keys())[ind_col_shift]
-
-    for ind_row in range(1, rows):
-        for ind_col in lst[0::len(data.keys())]:
-            for ind_col_shift in range(len(data.keys())):
-                file_output[ind_row][ind_col+ind_col_shift] = \
-                        data[list(data.keys())[ind_col_shift]]()
+            tags.append(list(data.keys())[ind_col_shift])
 
     last_indeces_start = cols-int(cols % len(data.keys()))
     for final_ind in range(last_indeces_start, cols):
-        file_output[0][final_ind] = \
-                list(data.keys())[final_ind-last_indeces_start]
+        tags.append(list(data.keys())[final_ind-last_indeces_start])
 
-    for ind_row in range(1, rows):
+    values = list()
+
+    for _ in range(1, rows):
+        val = list()
+        for _ in lst[0::len(data.keys())]:
+            for ind_col_shift in range(len(data.keys())):
+                val.append(data[list(data.keys())[ind_col_shift]]())
         for final_ind in range(last_indeces_start, cols):
-            file_output[ind_row][final_ind] = \
-                    data[list(data.keys())[final_ind-last_indeces_start]]()
+            val.append(data[list(data.keys())[final_ind-last_indeces_start]]())
+        values.append(val)
 
-    # print(file_output)
+    file_output = {
+        'tags': tags,
+        'values': values
+    }
+    print(file_output)
 
-    # save matrix to the csv file
-    if out_file_name.suffix != 'csv':
-        out_file_name = pathlib.Path(str(out_file_name)+'.csv')
+    # save matrix to the json file
+    if out_file_name.suffix != 'json':
+        out_file_name = pathlib.Path(str(out_file_name)+'.json')
 
     out = open(str(out_file_name), "w")
-
-    csv_writer = csv.writer(out, delimiter=',', quotechar='"',
-                            quoting=csv.QUOTE_MINIMAL)
-    csv_writer.writerows(file_output)
-
+    json.dump(file_output, out)
     out.close()
 
 
