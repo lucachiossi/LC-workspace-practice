@@ -97,7 +97,7 @@ def main():
     # print(file_output)
 
     # save matrix to the csv file
-    if out_file_name.suffix != 'csv':
+    if out_file_name.suffix != '.csv':
         out_file_name = pathlib.Path(str(out_file_name)+'.csv')
 
     out = open(str(out_file_name), "w")

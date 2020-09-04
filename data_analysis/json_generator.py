@@ -99,7 +99,7 @@ def main():
     # print(file_output)
 
     # save matrix to the json file
-    if out_file_name.suffix != 'json':
+    if out_file_name.suffix != '.json':
         out_file_name = pathlib.Path(str(out_file_name)+'.json')
 
     out = open(str(out_file_name), "w")
