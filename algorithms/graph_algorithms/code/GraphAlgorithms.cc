@@ -409,88 +409,143 @@ void WIT_PathGraph(AdjacencyList& list, AdjVertex* start, AdjVertex* end) {
     std::cout << std::endl;
 }
 
-int get_alfa(std::string& string1, std::string& string2) {
-    int alfa_gap = 1;
-    int alfa_mismatch = 1;
+int alfa_gap = 2;
+int alfa_mismatch = 3;
 
-    char* str1 = const_cast<char*>(string1.c_str());
-    char* str2 = const_cast<char*>(string2.c_str());
+int get_alfa_mismatch(char c1, char c2) {
+    if(c1 == c2)
+        return 0;
+    else
+        return alfa_mismatch;
+}
 
+int get_alfa_init(char ch, std::string& s, int previous_alfa) {
+    char* str = const_cast<char*>(s.c_str());
+    int size = strlen(str);
 
-    int size1 = strlen(str1);
-    int size2 = strlen(str2);
-    std::cout << "size1: " << size1 << ", size2: " << size2 << std::endl;
+    int alfa = get_alfa_mismatch(ch,str[size-1]) + (alfa_gap*(size-1));
 
-    int cycle;
-    if(size1 > size2) {
-        cycle = size1;
-    }
-    else {
-        cycle = size2;
-    }
+    if(alfa > previous_alfa+alfa_gap)
+        alfa = previous_alfa+alfa_gap;
 
-    int alfa = 0;
-    for(int i = 0; i < cycle; i++) {
-        if(i >= size1 || i > size2) {
-            alfa += alfa_gap;
-        }
-        else {
-            if(str1[i] == str2[i]) {
-                alfa += 0;
-            }
-            else if(str1[i] == '0' || str2[i] == '0') {
-                alfa += alfa_gap;
-            }
-            else {
-                alfa += alfa_mismatch;
-            }
-        }
-    }
-
-    std::cout << "mismatch of " << str1 << " and " << str2 << ": " << alfa << std::endl;
+    std::cout << "alfa init of '" << ch << "' and '" << str << "': " << alfa << std::endl;
     return alfa;
 }
 
+struct min {
+    bool operator() (int a, int b) const {
+        return a > b;
+    }
+};
 
 void SequenceAlignmentProblem(std::string& string1, std::string& string2) {
-    int A[string1.length()][string2.length()];
-    // get values
-    std::cout << "get alfa evaluations" << std::endl;
-    std::string temp1;
-    std::string temp2;
-    for(int i = 0; i < string1.length(); i++) {
-        temp1.assign(string1,0,i+1);
-        temp2.assign(string2,0,1);
-        A[i][0] = get_alfa(temp1,temp2);
+    int DIM1 = string1.length();
+    int DIM2 = string2.length();
+    int A[DIM1][DIM2];
+    std::cout << "sequence alignment computation of: '" << string1 << "' and '" << string2 << "'\n";
+    std::string temp;
+
+    // initialize first element
+    A[0][0] = get_alfa_mismatch(*string1.begin(),*string2.begin());
+    std::cout << "first element: " << A[0][0] << std::endl;
+
+    // initialize first column
+    for(int i = 1; i < DIM1; i++) {
+        temp.assign(string1,0,i+1);
+        A[i][0] = get_alfa_init(*string2.begin(),temp,A[i-1][0]);
     }
-    for(int j = 0; j < string2.length(); j++) {
-        temp1.assign(string1,0,1);
-        temp2.assign(string2,0,j+1);
-        A[0][j] = get_alfa(temp1,temp2);
+
+    // initialize first row
+    for(int j = 1; j < DIM2; j++) {
+        temp.assign(string2,0,j+1);
+        A[0][j] = get_alfa_init(*string1.begin(),temp,A[0][j-1]);
     }
-    for(int i = 1; i < string1.length(); i++) {
-        for(int j = 1; j < string2.length(); j++) {
-            std::cout << "iter" << std::endl;
-            temp1.assign(string1,0,i+1);
-            temp2.assign(string2,0,j+1);
-            std::vector<int> min;
-            std::make_heap(min.begin(), min.end());
-            min.push_back(get_alfa(temp1, temp2)+A[i-1][j-1]); std::push_heap(min.begin(), min.end());
-            temp1.assign(string1,0,i);
-            temp2.assign(string1,0,j+1);
-            min.push_back(get_alfa(temp1, temp2)); std::push_heap(min.begin(), min.end());
-            temp1.assign(string1,0,i+1);
-            temp2.assign(string1,0,j);
-            min.push_back(get_alfa(temp1, temp2)); std::push_heap(min.begin(), min.end());
-            A[i][j] = min.front();
+
+    // get subproblems values
+    for(int i = 1; i < DIM1; i++) {
+        for(int j = 1; j < DIM2; j++) {
+            std::cout << "evaluating: " << std::endl;
+            std::vector<int> calc_min;
+            std::make_heap(calc_min.begin(),calc_min.end(),min());
+
+            std::cout << "\tinsert with mismatch: " << get_alfa_mismatch(*(string1.begin()+i),*(string2.begin()+j)) + A[i-1][j-1] << std::endl;
+            calc_min.push_back(get_alfa_mismatch(*(string1.begin()+i),*(string2.begin()+j)) + A[i-1][j-1]);
+            std::push_heap(calc_min.begin(),calc_min.end(),min());
+
+            std::cout << "\tinsert gap1: " << alfa_gap+A[i][j-1] << std::endl;
+            calc_min.push_back(alfa_gap+A[i][j-1]);
+            std::push_heap(calc_min.begin(),calc_min.end(),min());
+
+            std::cout << "\tinsert gap2: " << alfa_gap+A[i-1][j] << std::endl;
+            calc_min.push_back(alfa_gap+A[i-1][j]);
+            std::push_heap(calc_min.begin(),calc_min.end(),min());
+
+            std::cout << "chosen: " << calc_min.front() << std::endl;
+            A[i][j] = calc_min.front();
         }
     }
+
     // print values
     std::cout << "penalties:\n";
-    for(int i = 0; i < string1.length(); i++) {
-        for(int j = 0; j < string2.length(); j++) {
+    for(int i = 0; i < DIM1; i++) {
+        for(int j = 0; j < DIM2; j++) {
             std::cout << A[i][j] << " ";
         }
         std::cout << std::endl;
     }
+
+    // optimal solution
+    std::string sol1;
+    std::string sol2;
+
+    int i = DIM1-1;
+    int j = DIM2-1;
+    while(i >= 0 || j >= 0) {
+        int opt1 = A[i-1][j-1];
+        int opt2 = A[i-1][j];
+        int opt3 = A[i][j-1];
+        if(j <= 0 && i != -1) {
+            if(j == 0) {
+                opt1 = A[i][j];
+            }
+            else {
+                opt1 = DIM1*DIM2*alfa_mismatch;
+                opt2 = -1;
+            }
+            opt3 = DIM1*DIM2*alfa_mismatch;
+        }
+        else if(i <= 0) {
+            if(i == 0) {
+                opt1 = A[i][j];
+            }
+            else {
+                opt1 = DIM1*DIM2*alfa_mismatch;
+                opt3 = -1;
+            }
+            opt2 = DIM1*DIM2*alfa_mismatch;
+        }
+        std::cout << "opt1: " << opt1 << ", opt2: " << opt2 << ", opt3: " << opt3 << std::endl;
+        if(opt1 < opt2 && opt1 < opt3) {
+            sol1.insert(sol1.begin(),*(string1.begin()+i));
+            sol2.insert(sol2.begin(),*(string2.begin()+j));
+            i--;
+            j--;
+            std::cout << "case1\n";
+        }
+        else if(opt2 < opt1 && opt2 < opt3) {
+            sol1.insert(sol1.begin(),*(string1.begin()+(i)));
+            sol2.insert(sol2.begin(),' ');
+            i--;
+            std::cout << "case2\n";
+        }
+        else {
+            sol1.insert(sol1.begin(),' ');
+            sol2.insert(sol2.begin(),*(string2.begin()+(j)));
+            j--;
+            std::cout << "case3\n";
+        }
+        std::cout << "i " << i << ", j " << j << std::endl;
+    }
+
+    std::cout << "the optimal alignment is: '" << sol1 << "' and '" << sol2 << "'" << std::endl;
 }

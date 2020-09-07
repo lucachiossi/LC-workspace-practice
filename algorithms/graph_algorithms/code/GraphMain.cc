@@ -228,8 +228,12 @@ int main(int argc, char* argv[]) {
     std::cout << std::endl << "Experiment 10: sequence alignment problem - Dynamic Programming" << std::endl;
     c_start = std::clock();
 
-    std::string string1 = "abcd";
-    std::string string2 = "afd";
+    /* std::string string2 = "acbdcb"; */
+    /* std::string string1 = "dcb"; */
+    /* std::string string1 = "abcd"; */
+    /* std::string string2 = "bed"; */
+    std::string string1 = "bacb";
+    std::string string2 = "aba";
 
     SequenceAlignmentProblem(string1, string2);
 
