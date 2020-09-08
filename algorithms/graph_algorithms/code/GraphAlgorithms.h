@@ -17,7 +17,7 @@ void Kosaraju_Algorithm(AdjacencyList& list);
 // Minimum Cut Problem //TODO
 void Minimum_Cutting_Edge(AdjacencyList& adj_list);
 
-// Dijkstra's Shortest Path
+// Dijkstra's Shortest Path (Greedy)
 void Dijkstras_Shortest_Path(AdjacencyList& list, AdjVertex* start, AdjVertex* end);
 
 // Minimum Spanning Tree
@@ -30,6 +30,12 @@ void WIT_PathGraph(AdjacencyList& list, AdjVertex* start, AdjVertex* end);
      * possible optimal scenarios are 3 */
 void SequenceAlignmentProblem(std::string& string1, std::string& string2);
 
-// NP-Complete Problems
+// Bellman-Ford's Shortest Path (DP)
+void Bellman_Ford_Algorithm(AdjacencyList& adj_list, AdjVertex* start, AdjVertex* end);
 
+// NP-Complete Problems
+/* Knapskack Problem */
+// Exact Algorithm
+
+// Approximation Algorithm
 #endif

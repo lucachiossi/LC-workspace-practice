@@ -230,16 +230,41 @@ int main(int argc, char* argv[]) {
 
     /* std::string string2 = "acbdcb"; */
     /* std::string string1 = "dcb"; */
+    /* SequenceAlignmentProblem(string1, string2); */
+
     /* std::string string1 = "abcd"; */
     /* std::string string2 = "bed"; */
+    /* SequenceAlignmentProblem(string1, string2); */
+
     std::string string1 = "bacb";
     std::string string2 = "aba";
-
     SequenceAlignmentProblem(string1, string2);
 
     c_end = std::clock();
     time_elapsed_ms = 1000.0 * (c_end-c_start) / CLOCKS_PER_SEC;
     std::cout << "time: " << time_elapsed_ms << " ms" << std::endl;
+
+    adj_list.resetExploration();
+
+    // Experiment11
+    std::cout << std::endl << "Experiment 11: Bellman-Ford Algorithm - Distributed Shortest Path" << std::endl;
+    c_start = std::clock();
+
+    adj_list.insertVertex();
+    adj_list.insertEdge(4,10,3);
+
+    std::cout << adj_list.printGraph("Bellman_Ford_Algorithm") << std::endl;
+
+    AdjVertex* bstart = adj_list.getVerteces()->find(6)->second;
+    AdjVertex* bend = adj_list.getVerteces()->find(10)->second;
+
+    Bellman_Ford_Algorithm(adj_list, bstart, bend);
+
+    c_end = std::clock();
+    time_elapsed_ms = 1000.0 * (c_end-c_start) / CLOCKS_PER_SEC;
+    std::cout << "time: " << time_elapsed_ms << " ms" << std::endl;
+
+    adj_list.eraseVertex(10);
 
     adj_list.resetExploration();
 

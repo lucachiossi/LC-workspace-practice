@@ -549,3 +549,62 @@ void SequenceAlignmentProblem(std::string& string1, std::string& string2) {
 
     std::cout << "the optimal alignment is: '" << sol1 << "' and '" << sol2 << "'" << std::endl;
 }
+
+void explore_vertex(AdjVertex* v) {
+
+}
+
+void Bellman_Ford_Algorithm(AdjacencyList& adj_list, AdjVertex* start, AdjVertex* end) {
+    std::vector<AdjVertex*> next_cycle;
+
+    // first round
+    for(auto it = start->getIncidenceEdges()->begin(); it != start->getIncidenceEdges()->end(); it++) {
+        AdjVertex* v = (*it)->getFollowing();
+        v->setVal((*it)->getWeight());
+        v->setExplored(true);
+        v->setLeader(start);
+        next_cycle.push_back(v);
+        std::cout << v->getId() << " with val " << v->getVal() << ", leader " << v->getLeader()->getId() << std::endl;
+    }
+
+    // exploring
+    int i = 0;
+    while(next_cycle.size() != 0) {
+        std::cout << "it " << i << std::endl;
+        int size = next_cycle.size();
+        for(int i = 0; i < size; i++) {
+            AdjVertex* current_start = next_cycle.front();
+            next_cycle.erase(next_cycle.begin());
+            std::cout << "vertex " << current_start->getId() << std::endl;
+            for(auto itt = current_start->getIncidenceEdges()->begin(); itt != current_start->getIncidenceEdges()->end(); itt++) {
+                int new_weight = current_start->getVal()+(*itt)->getWeight();
+                AdjVertex* v = (*itt)->getFollowing();
+                std::cout << "path " << current_start->getId() << " - " << v->getId() << std::endl;
+                if(v->isExplored()) {
+                    if(new_weight < v->getVal()) {
+                        v->setVal(new_weight);
+                        v->setLeader(current_start);
+                        next_cycle.push_back(v);
+                        std::cout << v->getId() << " with val " << v->getVal() << ", leader " << v->getLeader()->getId() << std::endl;
+                    }
+                }
+                else {
+                    v->setExplored(true);
+                    v->setVal(new_weight);
+                    v->setLeader(current_start);
+                    next_cycle.push_back(v);
+                    std::cout << v->getId() << " with val " << v->getVal() << ", leader " << v->getLeader()->getId() << std::endl;
+                }
+            }
+        }
+        i++;
+
+        // check negative cycles
+        /*
+         * run the algorithms n times instead of n-1 */
+
+        // get optimal solution
+        /* 
+         * start from bend and cycle over leaders */
+    }
+}
