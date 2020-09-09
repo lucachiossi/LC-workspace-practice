@@ -4,6 +4,7 @@
 #include <deque>
 #include <ios>
 #include <iostream>
+#include <ostream>
 #include <vector>
 #include <random>
 #include <set>
@@ -607,4 +608,127 @@ void Bellman_Ford_Algorithm(AdjacencyList& adj_list, AdjVertex* start, AdjVertex
         /* 
          * start from bend and cycle over leaders */
     }
+}
+
+void Knapsack(std::vector<int>& weights, std::vector<int>& vals, int W) {
+    int A[W+1][weights.size()+1];
+
+    if(weights.size() != vals.size()) {
+        std::cout << "Knapsack need weights and vals in same number" << std::endl;
+        return;         
+    }
+
+    std::cout << "Knapsack of:";
+    for(int i = 0; i < weights.size(); i++) {
+        std::cout << " (" << weights.at(i) << "," << vals.at(i) << ")";
+    }
+    std::cout << " with weight: " << W << std::endl;
+
+    for(int i = 0; i < weights.size()+1; i++) {
+        A[0][i] = 0;
+    }
+    for(int i = 0; i < W+1; i++) {
+        A[i][0] = 0;
+    }
+
+    for(int j = 1; j < weights.size()+1; j++) {
+        for(int i = 1; i < W+1; i++) {
+            int temp_i = i-(weights.at(j-1));
+            int temp_j = j-1;
+            int val = A[i][temp_j];
+            if(temp_i >= 0) {
+                int new_entry = A[temp_i][temp_j]+vals.at(j-1);
+                if(val < new_entry) {
+                    val = new_entry;
+                }
+            }
+            A[i][j] = val;        
+        }
+    }
+
+    std::cout << "matrix:\n";
+    for(int i = 0; i < W+1; i++) {
+        for(int j = 0; j < weights.size()+1; j++) {
+            std::cout << A[i][j] << " ";
+        }
+        std::cout << std::endl;
+    }
+}
+
+struct knapsack_element {
+    int weight;
+    int val;
+    float greedy;
+};
+
+struct knapsack_sort {
+    bool operator() (knapsack_element a, knapsack_element b) {
+        return (a.greedy > b.greedy);
+    }
+};
+
+void Knapsack_greedy_heuristic(std::vector<int>& weights, std::vector<int>& vals, int W) {
+    if(weights.size() != vals.size()) {
+        std::cout << "Knapsack need weights and vals in same number" << std::endl;
+        return;         
+    }
+
+    std::cout << "Knapsack of:";
+    for(int i = 0; i < weights.size(); i++) {
+        std::cout << " (" << weights.at(i) << "," << vals.at(i) << ")";
+    }
+    std::cout << " with weight: " << W << std::endl;
+
+    std::vector<knapsack_element> knapsack_greedy_vector;
+    for(int i = 0; i < weights.size(); i++) {
+        struct knapsack_element temp;
+        temp.weight = weights.at(i);
+        temp.val = vals.at(i);
+        temp.greedy = temp.val/temp.weight;
+        knapsack_greedy_vector.push_back(temp);
+    }
+    std::sort(knapsack_greedy_vector.begin(),knapsack_greedy_vector.end(),knapsack_sort());
+
+    /* for(auto it = knapsack_greedy_vector.begin(); it != knapsack_greedy_vector.end(); it++) { */
+    /*     std::cout << "(" << (*it).val << "," << (*it).weight << ") "; */
+    /* } */
+
+    struct knapsack_element max = knapsack_greedy_vector.front();
+    int sum = 0;
+    int left_space = W;
+    std::vector<knapsack_element> buffer;
+    for(auto it = knapsack_greedy_vector.begin(); it != knapsack_greedy_vector.end(); it++) {
+        if((*it).val > max.val && (*it).weight <= W) {
+            max = *it;
+        }
+        if(left_space - (*it).weight >= 0) {
+            sum += (*it).val;
+            left_space -= (*it).weight;
+            buffer.push_back(*it);
+        }
+    }
+
+    if(sum < max.val) {
+        buffer.clear();
+        buffer.push_back(max);
+    }
+
+    std::cout << "solution:";
+    for(auto it = buffer.begin(); it != buffer.end(); it++) {
+        std::cout << " (" << (*it).val << "," << (*it).weight << ")";
+    }
+    std::cout << std::endl;
+}
+
+void Knapsack_dynamic_heuristic(std::vector<int>& weights, std::vector<int>& vals, int W) {
+    if(weights.size() != vals.size()) {
+        std::cout << "Knapsack need weights and vals in same number" << std::endl;
+        return;         
+    }
+
+    std::cout << "Knapsack of:";
+    for(int i = 0; i < weights.size(); i++) {
+        std::cout << " (" << weights.at(i) << "," << vals.at(i) << ")";
+    }
+    std::cout << " with weight: " << W << std::endl;
 }

@@ -177,7 +177,7 @@ int main(int argc, char* argv[]) {
     adj_list.resetExploration();
 
     // Experiment9
-    std::string s = "./not_weighted_undirected_graph.json";
+    std::string s = "./graphs/not_weighted_undirected_graph.json";
     AdjacencyList path_graph(const_cast<char*>(s.c_str()));
     path_graph.eraseVertex(5);
     path_graph.eraseVertex(8);
@@ -267,6 +267,38 @@ int main(int argc, char* argv[]) {
     adj_list.eraseVertex(10);
 
     adj_list.resetExploration();
+
+    // Experiment12
+    std::cout << std::endl << "Experiment 12: Knapsack Problem - NP Problem - Exact algorithm" << std::endl;
+    c_start = std::clock();
+
+    //TODO
+
+    c_end = std::clock();
+    time_elapsed_ms = 1000.0 * (c_end-c_start) / CLOCKS_PER_SEC;
+    std::cout << "time: " << time_elapsed_ms << " ms" << std::endl;
+
+    // Experiment13
+    std::cout << std::endl << "Experiment 13: Knapsack Problem - NP Problem - Exact and Aproximation algorithms" << std::endl;
+    c_start = std::clock();
+
+    int weights_arr[] = {3,6,2,4,2};
+    int vals_arr[] = {5,8,3,2,5};
+    int W = 6;
+    
+    std::vector<int> weights(weights_arr, weights_arr + (sizeof(weights_arr) / sizeof(int)));
+    std::vector<int> vals(vals_arr, vals_arr + (sizeof(vals_arr) / sizeof(int)));
+
+    std::cout << "-*-*-Exact Algorithm-*-*-\n";
+    Knapsack(weights, vals, W);
+    std::cout << "-*-*-Aproximation Algorithm - Greedy Heuristic-*-*-\n";
+    Knapsack_greedy_heuristic(weights, vals, W);
+    std::cout << "-*-*-Aproximation Algorithm - Dynamic Programming Heuristic-*-*-\n";
+    Knapsack_dynamic_heuristic(weights, vals, W);
+
+    c_end = std::clock();
+    time_elapsed_ms = 1000.0 * (c_end-c_start) / CLOCKS_PER_SEC;
+    std::cout << "time: " << time_elapsed_ms << " ms" << std::endl;
 
     // End Experiments
     std::chrono::system_clock::time_point end_experiments = std::chrono::system_clock::now();

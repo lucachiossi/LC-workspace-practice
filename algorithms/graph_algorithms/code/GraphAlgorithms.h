@@ -32,10 +32,15 @@ void SequenceAlignmentProblem(std::string& string1, std::string& string2);
 
 // Bellman-Ford's Shortest Path (DP)
 void Bellman_Ford_Algorithm(AdjacencyList& adj_list, AdjVertex* start, AdjVertex* end);
+// All Pairs Shortest Path //TODO
+/* void Floyd_Warshall_Algorithm(AdjacencyList& adj_list); */ 
+/* void Johsnon_Algorithm(AdjacencyList& adj_list); */
 
 // NP-Complete Problems
 /* Knapskack Problem */
-// Exact Algorithm
-
-// Approximation Algorithm
+// Exact Algorithm (KP)
+void Knapsack(std::vector<int>& weights, std::vector<int>& vals, int W);
+// Approximation Algorithm (KP)
+void Knapsack_greedy_heuristic(std::vector<int>& weights, std::vector<int>& vals, int W);
+void Knapsack_dynamic_heuristic(std::vector<int>& weights, std::vector<int>& vals, int W);
 #endif
