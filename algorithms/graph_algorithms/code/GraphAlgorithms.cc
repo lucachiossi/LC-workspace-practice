@@ -638,6 +638,7 @@ void Knapsack(std::vector<int>& weights, std::vector<int>& vals, int W) {
             int val = A[i][temp_j];
             if(temp_i >= 0) {
                 int new_entry = A[temp_i][temp_j]+vals.at(j-1);
+                /* std::cout << "val: " << val << ", new_entry: " << new_entry << ", A[temp_i][temp_j]: " << A[temp_i][temp_j] << ", vals.at(j-1): " << vals.at(j-1) << std::endl; */
                 if(val < new_entry) {
                     val = new_entry;
                 }
@@ -653,6 +654,22 @@ void Knapsack(std::vector<int>& weights, std::vector<int>& vals, int W) {
         }
         std::cout << std::endl;
     }
+
+    std::cout << "solution:";
+    int temp_i = W;
+    for(int j = weights.size(); j >= 0; j--) {
+        for(int i = temp_i; i >= 1 ; i--) {
+            if(A[temp_i][j] == A[temp_i][j-1]) {
+                break;
+            }
+            if(A[i][j] != A[temp_i][j]) {
+                temp_i = i;
+                std::cout << " (" << weights.at(j-1) << "," << vals.at(j-1) << ")";
+                break;
+            }        
+        }
+    }
+    std::cout << std::endl;
 }
 
 struct knapsack_element {
@@ -731,4 +748,6 @@ void Knapsack_dynamic_heuristic(std::vector<int>& weights, std::vector<int>& val
         std::cout << " (" << weights.at(i) << "," << vals.at(i) << ")";
     }
     std::cout << " with weight: " << W << std::endl;
+
+    //TODO
 }

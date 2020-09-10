@@ -38,9 +38,12 @@ void Bellman_Ford_Algorithm(AdjacencyList& adj_list, AdjVertex* start, AdjVertex
 
 // NP-Complete Problems
 /* Knapskack Problem */
-// Exact Algorithm (KP)
+
+// Exact Algorithm (KP) (DP) - (wi integers) - correct
 void Knapsack(std::vector<int>& weights, std::vector<int>& vals, int W);
-// Approximation Algorithm (KP)
+// Approximation Algorithm (KP) (Greedy) - (go faster) - less precise
 void Knapsack_greedy_heuristic(std::vector<int>& weights, std::vector<int>& vals, int W);
+// Approximation Algorithm (KP) (DP) - (vi integers) - less precise
 void Knapsack_dynamic_heuristic(std::vector<int>& weights, std::vector<int>& vals, int W);
+
 #endif
