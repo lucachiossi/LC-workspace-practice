@@ -1,0 +1,4 @@
+<volume>
+	<name>example_volume.img</name>
+	<capacity unit='G'>10</capacity>
+</volume>

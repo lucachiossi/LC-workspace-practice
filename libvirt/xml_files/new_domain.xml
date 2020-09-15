@@ -1,0 +1,26 @@
+<domain type='kvm'>
+	<name>example_domain</name>
+	<memory>2147483648</memory>
+	<vcpu>2</vcpu>
+	<os>
+		<type arch='x86_64'>hvm</type>
+		<boot dev='cdrom'/>
+	</os>
+	<clock sync='localtime'/>
+	<on_poweroff>destroy</on_poweroff>
+	<devices>
+		<emulator>/usr/bin/qemu-system-x86_64</emulator>
+		<disk type='file' device='cdrom'>
+			<source file='/home/luca/Workspace/vms_imgs/ubuntu-20.04.1-live-server-amd64.iso'/>
+			<target dev='hda'/>
+			<readonly/>
+		</disk>
+		<disk type='file' device='disk'>
+			<source file='/var/lib/libvirt/images/example_volume.img'/>
+			<target dev='hdc'/>
+		</disk>
+		<interface type='network'>
+			<source network='default'/>
+		</interface>
+	</devices>
+</domain>
