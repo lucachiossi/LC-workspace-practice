@@ -1,1 +1,0 @@
-this is an example file to see how to work with git Fugitive and git in general

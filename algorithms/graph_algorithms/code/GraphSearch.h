@@ -32,7 +32,7 @@ class BreadthFirstSearch : public GraphExploration {
 /* Depth First Search [DFS] implementation */
 class DepthFirstSearch : public GraphExploration {
     public:
-        DepthFirstSearch(AdjVertex* startVertex);
+        explicit DepthFirstSearch(AdjVertex* startVertex);
         ~DepthFirstSearch() {};
         void explore() override;
         std::string printExplorationStatus() override;

@@ -4,22 +4,20 @@ ODIR = ./bin
 CXX = g++
 CXXFLAGS = -I $(IDIR)
 
-_DEPS = Data.h
+_DEPS = Lib.h
 DEPS = $(patsubst %,$(IDIR)/%,$(_DEPS))
 
-_CODE = Data.cc MemoryManagement.cc
+_CODE = Lib.cc Main.cc
 CODE = $(patsubst %,$(IDIR)/%,$(_CODE))
 
-_OBJ = Data.o MemoryManagement.o
+_OBJ = Lib.o Main.o
 OBJ = $(patsubst %,$(ODIR)/%,$(_OBJ))
 
 $(ODIR)/%.o: $(IDIR)/%.cc $(DEPS)
 	$(CXX) -c -o $@ $< $(CXXFLAGS)
 
-memory_management_example: $(OBJ)
+program: $(OBJ)
 	$(CXX) -o $@ $^ $(CXXFLAGS)
 	
 clean:
-	rm $(ODIR)/*.o memory_management_example
-	# rm -d $(ODIR)
-
+	rm $(ODIR)/*.o program
