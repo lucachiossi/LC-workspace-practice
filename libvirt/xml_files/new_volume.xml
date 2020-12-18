@@ -1,4 +1,4 @@
 <volume>
-	<name>example_volume.img</name>
+	<name>volume0.img</name>
 	<capacity unit='G'>10</capacity>
 </volume>
