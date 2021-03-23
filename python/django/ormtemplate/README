@@ -1,0 +1,6 @@
+ormtemplate/ -> folder containing the django project
+standalone/ -> folder containing app specifications
+manage.py -> file to manage django project
+settings.py -> file containing info to interact with db
+models.py -> model definition
+migrations/ -> folder containing migration scripts
