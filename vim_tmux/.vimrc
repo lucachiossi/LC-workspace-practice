@@ -7,16 +7,20 @@ set mouse=a
 
 colorscheme dante
 
-nmap <PageUp> :tabp<CR>
-nmap <PageDown> :tabn<CR>
+nmap <PageUp> :tabp <CR><F4><F4>
+nmap <PageDown> :tabn<CR><F4><F4>
 
-autocmd Filetype xml setlocal tabstop=2
-autocmd Filetype xml setlocal shiftwidth=2
-autocmd Filetype xml setlocal expandtab
+" in case not sure about filetype
+" echo &filetype
 
-autocmd Filetype cpp setlocal tabstop=4
-autocmd Filetype cpp setlocal shiftwidth=4
-autocmd Filetype cpp setlocal expandtab
+autocmd Filetype sh setlocal tabstop=2 shiftwidth=2 expandtab
+autocmd Filetype javascript setlocal tabstop=2 shiftwidth=2 expandtab
+autocmd Filetype json setlocal tabstop=2 shiftwidth=2 expandtab
+
+autocmd Filetype cpp setlocal tabstop=4 shiftwidth=4 expandtab
+autocmd Filetype xml setlocal tabstop=4 shiftwidth=4 expandtab
+autocmd Filetype html setlocal tabstop=4 shiftwidth=4 expandtab
+autocmd Filetype htmldjango setlocal tabstop=4 shiftwidth=4 expandtab
 
 " *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-* VUNDLE - PLUGINS SETUP *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
 set nocompatible              " be iMproved, required
@@ -39,6 +43,7 @@ Plugin 'valloric/youcompleteme'
 
 " 2) ----------> syntax checker
 Plugin 'scrooloose/syntastic' 
+":SyntasticInfo to see what's goin on
 
 " 3) ----------> file drawer, open with :NERDTreeToggle
 Plugin 'scrooloose/nerdtree' 
@@ -86,6 +91,7 @@ filetype plugin indent on    " required
 nmap <F1> :NERDTreeToggle<CR>
 nmap <F2> :CtrlP<CR>
 nmap <F3> :TagbarToggle<CR>
+nmap <F4> :call SyntasticToggle()<CR>
 
 " SETTINGS syntastic
 set statusline+=%#warningmsg#
@@ -97,8 +103,28 @@ let g:syntastic_auto_loc_list = 1
 let g:syntastic_check_on_open = 1
 let g:syntastic_check_on_wq = 0
 
+let g:syntastic_is_open = 0  
+function! SyntasticToggle()
+	if g:syntastic_is_open == 1
+		lclose
+		let g:syntastic_is_open = 0 
+	else
+		Errors
+		let g:syntastic_is_open = 1 
+	endif
+endfunction
+
+" C++
 let g:syntastic_cpp_checkers = ['gcc']
-let g_syntastic_python_checkers = ['pylint']
+" python
+let g:syntastic_python_checkers = ['pylint']
+" javascript/reactES6
+let g:syntastic_javascript_checkers = ['eslint']
+" npm -g install eslint
+" npm -g install eslint-plugin-react
+" configure ~/.eslintrc
+"	parser: "babel-eslint",
+"	plugin: ["react"],
 
 " SEETTINGS airline
 let g:airline#extensions#tabline#enabled = 1
