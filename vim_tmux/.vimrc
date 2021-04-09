@@ -21,6 +21,9 @@ autocmd Filetype cpp setlocal tabstop=4 shiftwidth=4 expandtab
 autocmd Filetype xml setlocal tabstop=4 shiftwidth=4 expandtab
 autocmd Filetype html setlocal tabstop=4 shiftwidth=4 expandtab
 autocmd Filetype htmldjango setlocal tabstop=4 shiftwidth=4 expandtab
+autocmd Filetype python setlocal tabstop=4 shiftwidth=4 expandtab
+
+let g:pyindent_open_paren = 'shiftwidth()'
 
 " *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-* VUNDLE - PLUGINS SETUP *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
 set nocompatible              " be iMproved, required
