@@ -16,6 +16,7 @@ nmap <PageDown> :tabn<CR><F4><F4>
 autocmd Filetype sh setlocal tabstop=2 shiftwidth=2 expandtab
 autocmd Filetype javascript setlocal tabstop=2 shiftwidth=2 expandtab
 autocmd Filetype json setlocal tabstop=2 shiftwidth=2 expandtab
+autocmd Filetype yaml setlocal tabstop=2 shiftwidth=2 expandtab
 
 autocmd Filetype cpp setlocal tabstop=4 shiftwidth=4 expandtab
 autocmd Filetype xml setlocal tabstop=4 shiftwidth=4 expandtab
@@ -86,6 +87,9 @@ Plugin 'majutsushi/tagbar'
 " 14) ---------> always highlights the enclosing html/xml tags
 Plugin 'valloric/matchtagalways'
 
+" 15) ---------> show indentation
+Plugin 'yggdroot/indentline'
+
 call vundle#end()            " required
 filetype plugin indent on    " required
 " *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-* VUNDLE - PLUGINS SETUP *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
@@ -121,6 +125,8 @@ endfunction
 let g:syntastic_cpp_checkers = ['gcc']
 " python
 let g:syntastic_python_checkers = ['pylint']
+" go
+let g:syntastic_go_checkers = ['go']
 " javascript/reactES6
 let g:syntastic_javascript_checkers = ['eslint']
 " npm -g install eslint
@@ -128,6 +134,7 @@ let g:syntastic_javascript_checkers = ['eslint']
 " configure ~/.eslintrc
 "	parser: "babel-eslint",
 "	plugin: ["react"],
+let g:syntastic_yaml_checkers = ['jsyaml']
 
 " SEETTINGS airline
 let g:airline#extensions#tabline#enabled = 1
@@ -146,3 +153,6 @@ let g:closetag_xhtml_filenames = '*.xhtml,*.jsx'
 let g:closetag_shortcut = '>'
 " Disables auto-close if not in a valid region (based on filetype)
 " let g:closetag_regions = {'typescript.tsx': 'jsxRegion,tsxRegion' 'javascript.jsx': 'jsxRegion'}
+
+" SETTINGS indentline
+let g:indentLine_setColors = 0
